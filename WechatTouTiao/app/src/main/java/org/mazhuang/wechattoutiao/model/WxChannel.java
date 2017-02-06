@@ -5,14 +5,14 @@ package org.mazhuang.wechattoutiao.model;
  */
 
 public class WxChannel {
-        String channel_type;
-        String dotnotify;
-        String editable;
-        Entrance h5_entrance;
-        int id;
-        String name;
-        String selected;
-        String subid;
+    public String channel_type;
+    public String dotnotify;
+    public String editable;
+    public Entrance h5_entrance;
+    public int id;
+    public String name;
+    public String selected;
+    public String subid;
 
     static class Entrance {
         String target_url;

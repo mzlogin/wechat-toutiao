@@ -46,7 +46,7 @@ public class WxClient {
         jsonObject.put("mid", "ed2b99000712042888");
         jsonObject.put("xid", "303b00c0881f01da1148bc8d8cc7c930387a");
         jsonObject.put("imsi", "460030971693100");
-        jsonObject.put("timeMillis", "1485095452350");
+        jsonObject.put("timeMillis", String.valueOf(System.currentTimeMillis()));
         jsonObject.put("os", "android");
         jsonObject.put("req_ver", 3);
         jsonObject.put("ver", "5101");

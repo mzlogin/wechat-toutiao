@@ -5,6 +5,12 @@ package org.mazhuang.wechattoutiao.model;
  */
 
 public class BaseResult {
+    public static int STATUS_SUCCESS = 1;
+
     String msg;
     int status;
+
+    public boolean isSuccessful() {
+        return (status == STATUS_SUCCESS);
+    }
 }

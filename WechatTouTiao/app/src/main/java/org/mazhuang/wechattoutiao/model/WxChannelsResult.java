@@ -8,16 +8,16 @@ import java.util.List;
 
 public class WxChannelsResult extends BaseResult {
 
-    ChannelResult result;
+    public ChannelResult result;
 
-    static class ChannelResult {
-        AuxiliaryModules auxiliary_modules;
-        List<WxChannel> channel_list;
-        int font_size;
-        int header_style;
-        NewChannel new_channel;
-        int showhobby;
-        int stream_style;
+    public static class ChannelResult {
+        public AuxiliaryModules auxiliary_modules;
+        public List<WxChannel> channel_list;
+        public int font_size;
+        public int header_style;
+        public NewChannel new_channel;
+        public int showhobby;
+        public int stream_style;
     }
 
     static class AuxiliaryModules {
