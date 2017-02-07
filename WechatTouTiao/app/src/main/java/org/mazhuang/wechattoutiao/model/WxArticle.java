@@ -11,15 +11,15 @@ public class WxArticle {
     String appendix;
     List<String> img_list;
     KeywordTag keyword_tag;
-    String link;
-    String open_link;
+    public String link;
+    public String open_link;
     String pub_source;
     long pub_time;
     int read_num;
     int stream_id;
     List<KeywordTag> subscribe_list;
-    List<Tag> tag; // TODO: 2017/1/23
-    String title;
+    Tag tag; // TODO: 2017/1/23
+    public String title;
     int type;
     List<String> unlike_list;
     int video_type;

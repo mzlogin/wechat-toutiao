@@ -24,7 +24,7 @@ public class ChannelPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = new ChannelFragment();
         Bundle args = new Bundle();
-        args.putString(ChannelFragment.CHANNEL_NAME, mData.result.channel_list.get(position).name);
+        args.putParcelable(ChannelFragment.CHANNEL_INFO, mData.result.channel_list.get(position));
         fragment.setArguments(args);
         return fragment;
     }

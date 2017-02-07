@@ -1,9 +1,9 @@
 package org.mazhuang.wechattoutiao.network;
 
+import org.mazhuang.wechattoutiao.model.WxArticlesResult;
 import org.mazhuang.wechattoutiao.model.WxChannelsResult;
 
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -18,5 +18,5 @@ public interface WxService {
     Call<WxChannelsResult> getChannels(@Query("mid") String mid, @Body RequestBody body);
 
     @POST("/data")
-    Call<ResponseBody> getArticles(@Query("mid") String mid, @Body RequestBody body);
+    Call<WxArticlesResult> getArticles(@Query("mid") String mid, @Body RequestBody body);
 }

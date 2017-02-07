@@ -6,9 +6,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
+import org.mazhuang.wechattoutiao.adapter.ArticlesAdapter;
+import org.mazhuang.wechattoutiao.model.WxArticlesResult;
+import org.mazhuang.wechattoutiao.model.WxChannel;
+import org.mazhuang.wechattoutiao.network.WxClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by mazhuang on 2017/2/6.
@@ -16,7 +25,11 @@ import org.mazhuang.wechattoutiao.R;
 
 public class ChannelFragment extends Fragment {
 
-    public static final String CHANNEL_NAME = "channel_name";
+    public static final String CHANNEL_INFO = "channel_info";
+
+    private WxChannel mChannelInfo;
+
+    private ArticlesAdapter mAdapter;
 
     @Nullable
     @Override
@@ -25,9 +38,23 @@ public class ChannelFragment extends Fragment {
 
         Bundle args = getArguments();
 
-        ((TextView) rootView.findViewById(R.id.channel_name)).setText(
-                args.getString(CHANNEL_NAME)
-        );
+        mChannelInfo = args.getParcelable(CHANNEL_INFO);
+
+        ListView list = (ListView) rootView.findViewById(R.id.articles);
+        mAdapter = new ArticlesAdapter();
+        list.setAdapter(mAdapter);
+
+        WxClient.getArticles(new Callback<WxArticlesResult>() {
+            @Override
+            public void onResponse(Call<WxArticlesResult> call, Response<WxArticlesResult> response) {
+                mAdapter.setData(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<WxArticlesResult> call, Throwable t) {
+                Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
+            }
+        }, mChannelInfo);
 
         return rootView;
     }

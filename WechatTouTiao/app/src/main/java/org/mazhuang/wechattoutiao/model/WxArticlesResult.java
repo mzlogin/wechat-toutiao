@@ -8,11 +8,11 @@ import java.util.List;
 
 public class WxArticlesResult extends BaseResult {
 
-    Result result;
+    public Result result;
 
-    static class Result {
-        int article_cnt;
+    public static class Result {
+        public int article_cnt;
 
-        List<WxArticle> article_list;
+        public List<WxArticle> article_list;
     }
 }
