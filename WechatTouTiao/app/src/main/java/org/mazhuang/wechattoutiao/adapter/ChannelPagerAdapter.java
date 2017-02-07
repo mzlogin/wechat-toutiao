@@ -38,6 +38,15 @@ public class ChannelPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    @Override
+    public CharSequence getPageTitle(int position) {
+        if (mData == null) {
+            return null;
+        } else {
+            return mData.result.channel_list.get(position).name;
+        }
+    }
+
     public void setData(WxChannelsResult data) {
         mData = data;
         notifyDataSetChanged();

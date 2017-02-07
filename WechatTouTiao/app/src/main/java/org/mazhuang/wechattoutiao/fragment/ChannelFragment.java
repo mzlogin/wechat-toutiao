@@ -47,7 +47,11 @@ public class ChannelFragment extends Fragment {
         WxClient.getArticles(new Callback<WxArticlesResult>() {
             @Override
             public void onResponse(Call<WxArticlesResult> call, Response<WxArticlesResult> response) {
-                mAdapter.setData(response.body());
+                if (response.body().isSuccessful()) {
+                    mAdapter.setData(response.body());
+                } else {
+                    Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

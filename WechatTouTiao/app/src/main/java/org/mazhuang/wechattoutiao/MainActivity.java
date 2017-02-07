@@ -34,6 +34,22 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mChannelAdapter = new ChannelPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mChannelAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                MainActivity.this.setTitle(mChannelAdapter.getPageTitle(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void fetchData() {
@@ -50,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<WxChannelsResult> call, Throwable t) {
-
+                Toast.makeText(MainActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
             }
         });
     }

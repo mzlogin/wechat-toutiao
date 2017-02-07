@@ -1,6 +1,7 @@
 package org.mazhuang.wechattoutiao.network;
 
 import android.os.Build;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +22,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class WxClient {
+
+    public static String TAG = WxClient.class.getSimpleName();
+
     public static String BASE_URL = "http://weixin.sa.sogou.com/";
 
     private static final MediaType DEFAULT_MEDIA_TYPE = okhttp3.MediaType.parse("application/json; charset=utf-8");
@@ -34,6 +38,8 @@ public class WxClient {
     public static void getChannels(Callback<WxChannelsResult> callback) {
         try {
             JSONObject jsonObject = getChannelsBody();
+
+            Log.d(TAG, "getChannels jsonObject: " + jsonObject.toString());
 
             RequestBody body = RequestBody.create(DEFAULT_MEDIA_TYPE, BODY_PREFIX + Security.aesEnc(jsonObject.toString()));
 
@@ -55,6 +61,8 @@ public class WxClient {
     public static void getArticles(Callback<WxArticlesResult> callback, WxChannel channel) {
         try {
             JSONObject jsonObject = getArticlesBody(channel);
+
+            Log.d(TAG, "getArticles jsonObject: " + jsonObject.toString());
 
             RequestBody body = RequestBody.create(DEFAULT_MEDIA_TYPE, BODY_PREFIX + Security.aesEnc(jsonObject.toString()));
 
