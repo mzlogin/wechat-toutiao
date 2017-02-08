@@ -91,6 +91,7 @@ public class WxClient {
         jsonObject.put("req_ver", 3);
         jsonObject.put("ver", "5101");
         jsonObject.put("os_ver", Build.VERSION.SDK_INT);
+        jsonObject.put("location", "116.331,39.993");
 
         JSONObject user = new JSONObject();
         user.put("network", 1);
