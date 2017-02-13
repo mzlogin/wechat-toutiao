@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<WxChannelsResult> call, Response<WxChannelsResult> response) {
                 Log.d("MainActivity", response.body().toString());
-                if (response.body().isSuccessful()) {
+                if (response.body() != null && response.body().isSuccessful()) {
                     mChannelAdapter.setData(response.body());
                 } else {
                     Toast.makeText(MainActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
