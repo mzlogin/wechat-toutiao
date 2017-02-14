@@ -5,7 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import org.mazhuang.wechattoutiao.fragment.ChannelFragment;
+import org.mazhuang.wechattoutiao.fragment.ChannelTypeOneFragment;
+import org.mazhuang.wechattoutiao.fragment.ChannelTypeTwoFragment;
 import org.mazhuang.wechattoutiao.model.WxChannelsResult;
 
 /**
@@ -20,11 +21,29 @@ public class ChannelPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
+    private static Fragment getChannelFragment(String channelType) {
+        Fragment fragment;
+        switch (channelType) {
+            case "1":
+                fragment = new ChannelTypeOneFragment();
+                break;
+
+            case "2":
+                fragment = new ChannelTypeTwoFragment();
+                break;
+
+            default:
+                fragment = new ChannelTypeOneFragment();
+                break;
+        }
+        return fragment;
+    }
+
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = new ChannelFragment();
+        Fragment fragment = getChannelFragment(mData.result.channel_list.get(position).channel_type);
         Bundle args = new Bundle();
-        args.putParcelable(ChannelFragment.CHANNEL_INFO, mData.result.channel_list.get(position));
+        args.putParcelable(ChannelTypeOneFragment.CHANNEL_INFO, mData.result.channel_list.get(position));
         fragment.setArguments(args);
         return fragment;
     }

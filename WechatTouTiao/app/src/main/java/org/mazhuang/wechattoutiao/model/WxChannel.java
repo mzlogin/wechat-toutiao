@@ -19,6 +19,7 @@ public class WxChannel implements Parcelable {
     public String selected;
     public String subid;
     public List<Entrance> external_entrance;
+    public String h5_link;
 
     WxChannel(Parcel in) {
         channel_type = in.readString();
@@ -30,6 +31,7 @@ public class WxChannel implements Parcelable {
         selected = in.readString();
         subid = in.readString();
         in.readTypedList(external_entrance, Entrance.CREATOR);
+        h5_link = in.readString();
     }
 
     @Override
@@ -48,6 +50,7 @@ public class WxChannel implements Parcelable {
         dest.writeString(selected);
         dest.writeString(subid);
         dest.writeTypedList(external_entrance);
+        dest.writeString(h5_link);
     }
 
     public static final Parcelable.Creator<WxChannel> CREATOR

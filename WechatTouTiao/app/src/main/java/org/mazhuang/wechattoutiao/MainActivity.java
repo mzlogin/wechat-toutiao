@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.adapter.ChannelPagerAdapter;
+import org.mazhuang.wechattoutiao.fragment.BaseFragment;
 import org.mazhuang.wechattoutiao.model.WxChannelsResult;
 import org.mazhuang.wechattoutiao.network.WxClient;
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         WxClient.getChannels(new Callback<WxChannelsResult>() {
             @Override
             public void onResponse(Call<WxChannelsResult> call, Response<WxChannelsResult> response) {
-                Log.d("MainActivity", response.body().toString());
+                Log.d(TAG, response.body().toString());
                 if (response.body() != null && response.body().isSuccessful()) {
                     mChannelAdapter.setData(response.body());
                 } else {
@@ -69,5 +70,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        BaseFragment currentFragment = (BaseFragment) mChannelAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
+        if (currentFragment != null && currentFragment.onBackPressed()) {
+            return;
+        }
+
+        super.onBackPressed();
     }
 }

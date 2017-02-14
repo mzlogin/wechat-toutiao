@@ -2,7 +2,6 @@ package org.mazhuang.wechattoutiao.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.adapter.ArticlesAdapter;
 import org.mazhuang.wechattoutiao.model.WxArticlesResult;
-import org.mazhuang.wechattoutiao.model.WxChannel;
 import org.mazhuang.wechattoutiao.network.WxClient;
 
 import retrofit2.Call;
@@ -24,11 +22,7 @@ import retrofit2.Response;
  * Created by mazhuang on 2017/2/6.
  */
 
-public class ChannelFragment extends Fragment {
-
-    public static final String CHANNEL_INFO = "channel_info";
-
-    private WxChannel mChannelInfo;
+public class ChannelTypeOneFragment extends BaseFragment {
 
     private ArticlesAdapter mAdapter;
 
@@ -37,11 +31,9 @@ public class ChannelFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_channel, container, false);
+        fetchArguments();
 
-        Bundle args = getArguments();
-
-        mChannelInfo = args.getParcelable(CHANNEL_INFO);
+        View rootView = inflater.inflate(R.layout.fragment_channel_type_one, container, false);
 
         ListView list = (ListView) rootView.findViewById(R.id.articles);
         mAdapter = new ArticlesAdapter();

@@ -1,9 +1,13 @@
-package org.mazhuang.wechattoutiao;
+package org.mazhuang.wechattoutiao.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+import org.mazhuang.wechattoutiao.R;
 
 public class ArticleActivity extends AppCompatActivity {
 
@@ -17,6 +21,10 @@ public class ArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_article);
 
         WebView webView = (WebView) findViewById(R.id.web_content);
+
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
 
         Intent intent = getIntent();
         if (intent != null) {

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.mazhuang.wechattoutiao.ArticleActivity;
+import org.mazhuang.wechattoutiao.activity.ArticleActivity;
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.model.WxArticle;
 import org.mazhuang.wechattoutiao.model.WxArticlesResult;
