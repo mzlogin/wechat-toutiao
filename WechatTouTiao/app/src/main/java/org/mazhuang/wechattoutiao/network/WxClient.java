@@ -10,7 +10,6 @@ import org.mazhuang.wechattoutiao.model.WxChannel;
 import org.mazhuang.wechattoutiao.model.WxChannelsResult;
 import org.mazhuang.wechattoutiao.utils.Security;
 
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,11 +22,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WxClient {
 
-    public static String TAG = WxClient.class.getSimpleName();
+    private static String TAG = WxClient.class.getSimpleName();
 
-    public static String BASE_URL = "http://weixin.sa.sogou.com/";
-
-    private static final MediaType DEFAULT_MEDIA_TYPE = okhttp3.MediaType.parse("application/json; charset=utf-8");
+    private static String BASE_URL = "http://weixin.sa.sogou.com/";
 
     private static final String BODY_PREFIX = "req=";
     private static final String BODY_FIELD_NEEDCATLIST = "needcatlist";
@@ -41,7 +38,7 @@ public class WxClient {
 
             Log.d(TAG, "getChannels jsonObject: " + jsonObject.toString());
 
-            RequestBody body = RequestBody.create(DEFAULT_MEDIA_TYPE, BODY_PREFIX + Security.aesEnc(jsonObject.toString()));
+            RequestBody body = RequestBody.create(null, (BODY_PREFIX + Security.aesEnc(jsonObject.toString())).getBytes());
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -64,7 +61,7 @@ public class WxClient {
 
             Log.d(TAG, "getArticles jsonObject: " + jsonObject.toString());
 
-            RequestBody body = RequestBody.create(DEFAULT_MEDIA_TYPE, BODY_PREFIX + Security.aesEnc(jsonObject.toString()));
+            RequestBody body = RequestBody.create(null, (BODY_PREFIX + Security.aesEnc(jsonObject.toString())).getBytes());
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
