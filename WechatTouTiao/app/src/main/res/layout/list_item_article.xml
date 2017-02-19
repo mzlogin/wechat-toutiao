@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/title"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/list_item_margin"
+        android:minHeight="64dp"
+        app:cardElevation="1dp">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/list_item_padding_hor"
+            android:paddingRight="@dimen/list_item_padding_hor"
+            android:textColor="@android:color/black"/>
+
+    </android.support.v7.widget.CardView>
+</FrameLayout>

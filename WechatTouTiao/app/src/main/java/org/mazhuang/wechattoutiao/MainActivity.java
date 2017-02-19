@@ -1,9 +1,11 @@
 package org.mazhuang.wechattoutiao;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.adapter.ChannelPagerAdapter;
@@ -19,11 +21,13 @@ public class MainActivity extends AppCompatActivity {
     public String TAG = getClass().getSimpleName();
 
     private ViewPager mViewPager;
+    private TabLayout mTabLayout;
     private ChannelPagerAdapter mChannelAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         initViews();
@@ -33,24 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        mTabLayout = (TabLayout) findViewById(R.id.tab);
         mChannelAdapter = new ChannelPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mChannelAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                MainActivity.this.setTitle(mChannelAdapter.getPageTitle(position));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     private void fetchData() {
