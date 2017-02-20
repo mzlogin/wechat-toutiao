@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.mazhuang.wechattoutiao.fragment.ChannelTypeOneFragment;
+import org.mazhuang.wechattoutiao.fragment.ChannelTypeThreeFragment;
 import org.mazhuang.wechattoutiao.fragment.ChannelTypeTwoFragment;
 import org.mazhuang.wechattoutiao.model.WxChannelsResult;
 
@@ -30,6 +31,10 @@ public class ChannelPagerAdapter extends FragmentStatePagerAdapter {
 
             case "2":
                 fragment = new ChannelTypeTwoFragment();
+                break;
+
+            case "3":
+                fragment = new ChannelTypeThreeFragment();
                 break;
 
             default:
