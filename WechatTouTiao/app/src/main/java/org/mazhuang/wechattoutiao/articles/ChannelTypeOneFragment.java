@@ -2,6 +2,7 @@ package org.mazhuang.wechattoutiao.articles;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,14 @@ import retrofit2.Response;
  * Created by mazhuang on 2017/2/6.
  */
 
-public class ChannelTypeOneFragment extends BaseFragment {
+public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ArticlesAdapter mAdapter;
 
-    private Button mRetryBtn;
+    private SwipeRefreshLayout mRefreshLayout;
+    private SwipeRefreshLayout mEmptyLayout;
+
+    private boolean mFirstFetchFinished = false;
 
     @Nullable
     @Override
@@ -34,19 +38,15 @@ public class ChannelTypeOneFragment extends BaseFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_channel_type_one, container, false);
 
+        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+        initSwipeLayout(mRefreshLayout);
+        mEmptyLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.empty);
+        initSwipeLayout(mEmptyLayout);
+
         ListView list = (ListView) rootView.findViewById(R.id.articles);
         mAdapter = new ArticlesAdapter();
         list.setAdapter(mAdapter);
-        list.setEmptyView(rootView.findViewById(R.id.empty));
-
-        mRetryBtn = (Button) rootView.findViewById(R.id.retry);
-        mRetryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRetryBtn.setEnabled(false);
-                fetchData();
-            }
-        });
+        list.setEmptyView(mEmptyLayout);
 
         fetchData();
 
@@ -60,22 +60,44 @@ public class ChannelTypeOneFragment extends BaseFragment {
                 if (response.body() != null && response.body().isSuccessful()) {
                     mAdapter.setData(response.body());
                 } else {
-                    Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
+                    if (getActivity() != null) {
+                        Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                if (mRetryBtn.getVisibility() != View.VISIBLE) {
-                    mRetryBtn.setVisibility(View.VISIBLE);
-                }
-                mRetryBtn.setEnabled(true);
+                finishRefresh();
+                mFirstFetchFinished = true;
             }
 
             @Override
             public void onFailure(Call<WxArticlesResult> call, Throwable t) {
-                Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
-                if (mRetryBtn.getVisibility() != View.VISIBLE) {
-                    mRetryBtn.setVisibility(View.VISIBLE);
+                if (getActivity() != null) {
+                    Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
                 }
-                mRetryBtn.setEnabled(true);
+                finishRefresh();
+                mFirstFetchFinished = true;
             }
         }, mChannelInfo);
+    }
+
+    private void initSwipeLayout(SwipeRefreshLayout swipeRefreshLayout) {
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    @Override
+    public void onRefresh() {
+        if (mFirstFetchFinished && mAdapter.getCount() == 0) {
+            fetchData();
+        } else {
+            finishRefresh();
+        }
+    }
+
+    private void finishRefresh() {
+        mRefreshLayout.setRefreshing(false);
+        mEmptyLayout.setRefreshing(false);
     }
 }
