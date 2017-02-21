@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.adapter;
+package org.mazhuang.wechattoutiao.articles;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.mazhuang.wechattoutiao.activity.ArticleActivity;
+import org.mazhuang.wechattoutiao.articledetail.ArticleActivity;
 import org.mazhuang.wechattoutiao.R;
-import org.mazhuang.wechattoutiao.model.WxArticle;
-import org.mazhuang.wechattoutiao.model.WxArticlesResult;
+import org.mazhuang.wechattoutiao.data.WxArticle;
+import org.mazhuang.wechattoutiao.data.WxArticlesResult;
 
 /**
  * Created by mazhuang on 2017/2/6.

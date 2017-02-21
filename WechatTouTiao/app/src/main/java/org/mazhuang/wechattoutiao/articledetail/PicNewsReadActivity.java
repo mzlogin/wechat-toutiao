@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.activity;
+package org.mazhuang.wechattoutiao.articledetail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import android.webkit.WebViewClient;
 
 import org.mazhuang.wechattoutiao.R;
 
-public class ArticleActivity extends AppCompatActivity {
+public class PicNewsReadActivity extends AppCompatActivity {
 
     public static final String URL = "url";
 
@@ -18,12 +18,12 @@ public class ArticleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article);
+        setContentView(R.layout.activity_pic_news_read);
 
         WebView webView = (WebView) findViewById(R.id.web_content);
-
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
         webView.setWebViewClient(new WebViewClient());
 
         Intent intent = getIntent();

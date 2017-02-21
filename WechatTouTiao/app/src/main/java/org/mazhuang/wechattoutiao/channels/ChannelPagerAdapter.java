@@ -1,14 +1,14 @@
-package org.mazhuang.wechattoutiao.adapter;
+package org.mazhuang.wechattoutiao.channels;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import org.mazhuang.wechattoutiao.fragment.ChannelTypeOneFragment;
-import org.mazhuang.wechattoutiao.fragment.ChannelTypeThreeFragment;
-import org.mazhuang.wechattoutiao.fragment.ChannelTypeTwoFragment;
-import org.mazhuang.wechattoutiao.model.WxChannelsResult;
+import org.mazhuang.wechattoutiao.articles.ChannelTypeOneFragment;
+import org.mazhuang.wechattoutiao.articles.ChannelTypeThreeFragment;
+import org.mazhuang.wechattoutiao.articles.ChannelTypeTwoFragment;
+import org.mazhuang.wechattoutiao.data.WxChannelsResult;
 
 /**
  * Created by mazhuang on 2017/2/6.

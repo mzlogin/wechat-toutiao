@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.model;
+package org.mazhuang.wechattoutiao.data;
 
 /**
  * Created by mazhuang on 2017/1/23.

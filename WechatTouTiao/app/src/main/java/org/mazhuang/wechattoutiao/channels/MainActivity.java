@@ -1,17 +1,16 @@
-package org.mazhuang.wechattoutiao;
+package org.mazhuang.wechattoutiao.channels;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Window;
 import android.widget.Toast;
 
-import org.mazhuang.wechattoutiao.adapter.ChannelPagerAdapter;
-import org.mazhuang.wechattoutiao.fragment.BaseFragment;
-import org.mazhuang.wechattoutiao.model.WxChannelsResult;
-import org.mazhuang.wechattoutiao.network.WxClient;
+import org.mazhuang.wechattoutiao.R;
+import org.mazhuang.wechattoutiao.articles.BaseFragment;
+import org.mazhuang.wechattoutiao.data.WxChannelsResult;
+import org.mazhuang.wechattoutiao.data.source.remote.WxClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

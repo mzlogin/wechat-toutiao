@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.fragment;
+package org.mazhuang.wechattoutiao.articles;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import android.webkit.WebViewClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mazhuang.wechattoutiao.R;
-import org.mazhuang.wechattoutiao.activity.PicNewsReadActivity;
+import org.mazhuang.wechattoutiao.articledetail.PicNewsReadActivity;
 
 /**
  * Created by mazhuang on 2017/2/13.

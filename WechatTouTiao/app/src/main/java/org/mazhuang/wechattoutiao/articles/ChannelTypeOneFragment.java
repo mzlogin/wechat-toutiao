@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.fragment;
+package org.mazhuang.wechattoutiao.articles;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +10,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
-import org.mazhuang.wechattoutiao.adapter.ArticlesAdapter;
-import org.mazhuang.wechattoutiao.model.WxArticlesResult;
-import org.mazhuang.wechattoutiao.network.WxClient;
+import org.mazhuang.wechattoutiao.data.WxArticlesResult;
+import org.mazhuang.wechattoutiao.data.source.remote.WxClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

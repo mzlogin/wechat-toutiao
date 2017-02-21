@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.model;
+package org.mazhuang.wechattoutiao.data;
 
 import java.util.List;
 

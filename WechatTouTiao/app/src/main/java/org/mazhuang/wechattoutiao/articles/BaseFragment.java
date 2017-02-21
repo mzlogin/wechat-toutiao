@@ -1,9 +1,9 @@
-package org.mazhuang.wechattoutiao.fragment;
+package org.mazhuang.wechattoutiao.articles;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import org.mazhuang.wechattoutiao.model.WxChannel;
+import org.mazhuang.wechattoutiao.data.WxChannel;
 
 /**
  * Created by mazhuang on 2017/2/13.

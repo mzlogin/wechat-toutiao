@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.utils;
+package org.mazhuang.wechattoutiao.util;
 
 import android.util.Base64;
 

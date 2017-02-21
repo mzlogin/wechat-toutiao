@@ -1,0 +1,25 @@
+                                          
+                                                            |
+               +---------------+                            |
+               |      UI       | <--------- event           |    just UI
+               +---------------+                            |
+                     ^   |                                  |
+                     |   |                                  |
+ call view interface |   | request data, wait for callback  |   ------------------------
+                     |   |                                  |
+                     |   |                                  |
+                     |   v                                  |
+               +---------------+                            |     
+               |   Presenter   |                            |     
+               +---------------+                            |     
+                     ^   |                                  |
+                     |   |                                  |
+            callback |   | request data                     |   ------------------------
+                     |   |                                  |
+                     |   |                                  |   fetch data, hide the 
+                     |   v                                  |
+               +---------------+                            |   details of data source
+               |   DataSource  |                            |    
+               +---------------+                            |   is memory/sqlite/http
+                                                            |
+ 

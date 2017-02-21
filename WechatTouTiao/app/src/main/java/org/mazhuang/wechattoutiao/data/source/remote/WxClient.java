@@ -1,14 +1,14 @@
-package org.mazhuang.wechattoutiao.network;
+package org.mazhuang.wechattoutiao.data.source.remote;
 
 import android.os.Build;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mazhuang.wechattoutiao.model.WxArticlesResult;
-import org.mazhuang.wechattoutiao.model.WxChannel;
-import org.mazhuang.wechattoutiao.model.WxChannelsResult;
-import org.mazhuang.wechattoutiao.utils.Security;
+import org.mazhuang.wechattoutiao.data.WxArticlesResult;
+import org.mazhuang.wechattoutiao.data.WxChannel;
+import org.mazhuang.wechattoutiao.data.WxChannelsResult;
+import org.mazhuang.wechattoutiao.util.Security;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
