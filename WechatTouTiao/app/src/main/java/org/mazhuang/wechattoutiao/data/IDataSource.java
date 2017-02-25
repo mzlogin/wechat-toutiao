@@ -23,7 +23,7 @@ public interface IDataSource {
 
     void getChannels(LoadChannelsCallback callback);
 
-    void getArticles(WxChannel channelInfo, LoadArticlesCallBack callback);
+    void getArticles(WxChannel channelInfo, int endStreamId, LoadArticlesCallBack callback);
 
-    void getMoreArticles(WxChannel channelInfo, LoadArticlesCallBack callback);
+    void getMoreArticles(WxChannel channelInfo, int endStreamId, LoadArticlesCallBack callback);
 }

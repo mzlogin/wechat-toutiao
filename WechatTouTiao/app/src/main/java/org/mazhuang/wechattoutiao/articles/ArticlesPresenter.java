@@ -24,6 +24,7 @@ public class ArticlesPresenter implements ArticlesContract.Presenter {
     public void loadArticles() {
         DataSource.getInstance().getArticles(
                 mArticlesView.getChannelInfo(),
+                -1,
                 new IDataSource.LoadArticlesCallBack() {
                     @Override
                     public void onArticlesLoaded(List<WxArticle> articles) {
@@ -39,6 +40,29 @@ public class ArticlesPresenter implements ArticlesContract.Presenter {
                         mArticlesView.showLoadingArticlesError();
                     }
                 });
+    }
+
+    @Override
+    public void loadMoreArticles() {
+        DataSource.getInstance().getMoreArticles(
+                mArticlesView.getChannelInfo(),
+                -1,
+                new IDataSource.LoadArticlesCallBack() {
+                    @Override
+                    public void onArticlesLoaded(List<WxArticle> articles) {
+                        if (articles == null || articles.size() == 0) {
+                            mArticlesView.showNoMoreArticles();;
+                        } else {
+                            mArticlesView.showMoreArticles(articles);
+                        }
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        mArticlesView.showLoadingMoreArticlesError();
+                    }
+                }
+        );
     }
 
     @Override

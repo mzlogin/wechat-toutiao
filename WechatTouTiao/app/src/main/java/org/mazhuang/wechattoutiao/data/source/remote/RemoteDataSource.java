@@ -14,7 +14,6 @@ import org.mazhuang.wechattoutiao.util.Security;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.exceptions.OnErrorNotImplementedException;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.RequestBody;
 import retrofit2.Retrofit;
@@ -36,6 +35,8 @@ public class RemoteDataSource implements IDataSource {
     private static final String BODY_FIELD_ACTION = "action";
     private static final String BODY_FIELD_END_STREAM_ID = "end_stream_id";
     private static final String BODY_FIELD_CHANNEL = "channel";
+    private static final String BODY_FIELD_START_TIME = "start_time";
+    private static final String BODY_FIELD_START_STREAM_ID = "start_stream_id";
 
     private Retrofit mRetrofit;
 
@@ -77,8 +78,8 @@ public class RemoteDataSource implements IDataSource {
     }
 
     @Override
-    public void getArticles(WxChannel channelInfo, final LoadArticlesCallBack callback) {
-        getArticles(channelInfo, new Observer<WxArticlesResult>() {
+    public void getArticles(WxChannel channelInfo, int endStreamId, final LoadArticlesCallBack callback) {
+        getArticles(channelInfo, endStreamId, new Observer<WxArticlesResult>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -106,8 +107,32 @@ public class RemoteDataSource implements IDataSource {
     }
 
     @Override
-    public void getMoreArticles(WxChannel channelInfo, LoadArticlesCallBack callback) {
-        throw new OnErrorNotImplementedException(new Throwable("Not implement yet"));
+    public void getMoreArticles(WxChannel channelInfo, int endStreamId, final LoadArticlesCallBack callback) {
+        getMoreArticles(channelInfo, endStreamId, new Observer<WxArticlesResult>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(WxArticlesResult wxArticlesResult) {
+                if (wxArticlesResult.isSuccessful()) {
+                    callback.onArticlesLoaded(wxArticlesResult.result.article_list);
+                } else {
+                    callback.onDataNotAvailable();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                callback.onDataNotAvailable();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     private void getChannels(Observer<WxChannelsResult> observer) {
@@ -120,18 +145,19 @@ public class RemoteDataSource implements IDataSource {
 
             WxService request = mRetrofit.create(WxService.class);
 
-            request.getChannels("ed2b99000712042888", body)
+            request.getChannels("ed2b99000712042888", body) // TODO
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
         } catch (Exception e) {
             e.printStackTrace();
+            observer.onError(new Throwable());
         }
     }
 
-    private void getArticles(WxChannel channelInfo, Observer<WxArticlesResult> observer) {
+    private void getArticles(WxChannel channelInfo, int endStreamId, Observer<WxArticlesResult> observer) {
         try {
-            JSONObject jsonObject = getArticlesBody(channelInfo);
+            JSONObject jsonObject = getArticlesBody(channelInfo, endStreamId);
 
             Log.d(TAG, "getArticles jsonObject: " + jsonObject.toString());
 
@@ -139,26 +165,47 @@ public class RemoteDataSource implements IDataSource {
 
             WxService request = mRetrofit.create(WxService.class);
 
-            request.getArticles("ed2b99000712042888", body)
+            request.getArticles("ed2b99000712042888", body) // TODO
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
         } catch (Exception e) {
             e.printStackTrace();
+            observer.onError(new Throwable());
+        }
+    }
+
+    private void getMoreArticles(WxChannel channelInfo, int endStreamId, Observer<WxArticlesResult> observer) {
+        try {
+            JSONObject jsonObject = getMoreArticlesBody(channelInfo, endStreamId);
+
+            Log.d(TAG, "getMoreArticles jsonObject: " + jsonObject.toString());
+
+            RequestBody body = RequestBody.create(null, (BODY_PREFIX + Security.aesEnc(jsonObject.toString().getBytes())));
+
+            WxService request = mRetrofit.create(WxService.class);
+
+            request.getMoreArticles("ed2b99000712042888", body) // TODO
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(observer);
+        } catch (Exception e) {
+            e.printStackTrace();
+            observer.onError(new Throwable());
         }
     }
 
     public static JSONObject getCommonBody() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("mid", "ed2b99000712042888");
-        jsonObject.put("xid", "303b00c0881f01da1148bc8d8cc7c930387a");
-        jsonObject.put("imsi", "460030971693100");
+        jsonObject.put("mid", "ed2b99000712042888"); // TODO
+        jsonObject.put("xid", "303b00c0881f01da1148bc8d8cc7c930387a"); // TODO
+        jsonObject.put("imsi", "460030971693100"); // TODO
         jsonObject.put("timeMillis", String.valueOf(System.currentTimeMillis()));
         jsonObject.put("os", "android");
         jsonObject.put("req_ver", 3);
         jsonObject.put("ver", "5101");
         jsonObject.put("os_ver", Build.VERSION.SDK_INT);
-        jsonObject.put("location", "116.331,39.993");
+        jsonObject.put("location", "116.331,39.993"); // TODO
 
         JSONObject user = new JSONObject();
         user.put("network", 1);
@@ -178,11 +225,29 @@ public class RemoteDataSource implements IDataSource {
         return jsonObject;
     }
 
-    public static JSONObject getArticlesBody(WxChannel channel) throws JSONException {
+    public static JSONObject getArticlesBody(WxChannel channel, int endStreamId) throws JSONException {
         JSONObject jsonObject = getCommonBody();
         jsonObject.put(BODY_FIELD_NEEDCATLIST, false);
         jsonObject.put(BODY_FIELD_ACTION, 1);
-        jsonObject.put(BODY_FIELD_END_STREAM_ID, -1);
+        jsonObject.put(BODY_FIELD_END_STREAM_ID, endStreamId);
+
+        JSONObject channelObj = new JSONObject();
+        channelObj.put("id", channel.id);
+        channelObj.put("name", channel.name);
+        channelObj.put("subid", Integer.valueOf(channel.subid));
+
+        jsonObject.put(BODY_FIELD_CHANNEL, channelObj);
+
+        return jsonObject;
+    }
+
+    public static JSONObject getMoreArticlesBody(WxChannel channel, int endStreamId) throws JSONException {
+        JSONObject jsonObject = getCommonBody();
+        jsonObject.put(BODY_FIELD_NEEDCATLIST, false);
+        jsonObject.put(BODY_FIELD_ACTION, 2);
+        jsonObject.put(BODY_FIELD_END_STREAM_ID, endStreamId);
+        jsonObject.put(BODY_FIELD_START_TIME, "2017-01-22 20:45:31"); // TODO
+        jsonObject.put(BODY_FIELD_START_STREAM_ID, 1); // TODO
 
         JSONObject channelObj = new JSONObject();
         channelObj.put("id", channel.id);

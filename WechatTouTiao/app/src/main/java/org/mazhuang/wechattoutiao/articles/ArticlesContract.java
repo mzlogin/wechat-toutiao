@@ -22,6 +22,12 @@ public interface ArticlesContract {
 
         void showLoadingArticlesError();
 
+        void showMoreArticles(List<WxArticle> articles);
+
+        void showNoMoreArticles();
+
+        void showLoadingMoreArticlesError();
+
         WxChannel getChannelInfo();
 
     }
@@ -29,6 +35,8 @@ public interface ArticlesContract {
     interface Presenter extends BasePresenter {
 
         void loadArticles();
+
+        void loadMoreArticles();
 
     }
 

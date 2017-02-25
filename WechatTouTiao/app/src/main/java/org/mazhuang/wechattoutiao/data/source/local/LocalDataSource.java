@@ -15,12 +15,12 @@ public class LocalDataSource implements IDataSource {
     }
 
     @Override
-    public void getArticles(WxChannel channelInfo, LoadArticlesCallBack callback) {
+    public void getArticles(WxChannel channelInfo, int endStreamId, LoadArticlesCallBack callback) {
         callback.onDataNotAvailable();
     }
 
     @Override
-    public void getMoreArticles(WxChannel channelInfo, LoadArticlesCallBack callback) {
+    public void getMoreArticles(WxChannel channelInfo, int endStreamId, LoadArticlesCallBack callback) {
         callback.onDataNotAvailable();
     }
 }

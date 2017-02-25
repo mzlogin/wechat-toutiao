@@ -1,6 +1,5 @@
 package org.mazhuang.wechattoutiao.articles;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,18 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.data.model.WxArticle;
-import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
-import org.mazhuang.wechattoutiao.data.source.remote.RemoteDataSource;
 
 import java.util.List;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by mazhuang on 2017/2/6.
@@ -76,31 +69,57 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
 
     @Override
     public void onRefresh() {
-        if (mFirstFetchFinished && mAdapter.getCount() == 0) {
+        if (!mFirstFetchFinished) {
+            return;
+        }
+
+        if (mAdapter.getCount() == 0) {
             mPresenter.loadArticles();
         } else {
-            finishRefresh();
+            mPresenter.loadMoreArticles();
         }
     }
 
     private void finishRefresh() {
         mRefreshLayout.setRefreshing(false);
         mEmptyLayout.setRefreshing(false);
+        if (!mFirstFetchFinished) {
+            mFirstFetchFinished = true;
+        }
     }
 
     @Override
     public void showArticles(List<WxArticle> articles) {
         mAdapter.setData(articles);
+        finishRefresh();
     }
 
     @Override
     public void showNoArticles() {
         mAdapter.setData(null);
+        finishRefresh();
     }
 
     @Override
     public void showLoadingArticlesError() {
         mAdapter.setData(null);
+        finishRefresh();
+    }
+
+    @Override
+    public void showMoreArticles(List<WxArticle> articles) {
+        mAdapter.setData(articles);
+        finishRefresh();
+    }
+
+    @Override
+    public void showNoMoreArticles() {
+        finishRefresh();
+    }
+
+    @Override
+    public void showLoadingMoreArticlesError() {
+        finishRefresh();
     }
 
     @Override

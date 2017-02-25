@@ -16,9 +16,9 @@ public class WxArticle {
     String pub_source;
     long pub_time;
     int read_num;
-    int stream_id;
+    public int stream_id;
     List<KeywordTag> subscribe_list;
-    Tag tag; // TODO: 2017/1/23
+    Tag tag;
     public String title;
     int type;
     List<String> unlike_list;

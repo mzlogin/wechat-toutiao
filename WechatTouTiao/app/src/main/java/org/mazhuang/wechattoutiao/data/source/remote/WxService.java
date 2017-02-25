@@ -20,4 +20,7 @@ public interface WxService {
 
     @POST("/data")
     Observable<WxArticlesResult> getArticles(@Query("mid") String mid, @Body RequestBody body);
+
+    @POST("/data")
+    Observable<WxArticlesResult> getMoreArticles(@Query("mid") String mid, @Body RequestBody body);
 }
