@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import org.mazhuang.wechattoutiao.articles.ChannelTypeOneFragment;
 import org.mazhuang.wechattoutiao.articles.ChannelTypeThreeFragment;
 import org.mazhuang.wechattoutiao.articles.ChannelTypeTwoFragment;
-import org.mazhuang.wechattoutiao.data.WxChannelsResult;
+import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
 
 /**
  * Created by mazhuang on 2017/2/6.

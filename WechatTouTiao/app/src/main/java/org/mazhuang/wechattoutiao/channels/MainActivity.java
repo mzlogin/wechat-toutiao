@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.articles.BaseFragment;
-import org.mazhuang.wechattoutiao.data.WxChannelsResult;
+import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
 import org.mazhuang.wechattoutiao.data.source.remote.WxClient;
 
 import retrofit2.Call;

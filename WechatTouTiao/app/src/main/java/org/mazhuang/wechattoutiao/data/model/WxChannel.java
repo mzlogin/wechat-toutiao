@@ -1,4 +1,4 @@
-package org.mazhuang.wechattoutiao.data;
+package org.mazhuang.wechattoutiao.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

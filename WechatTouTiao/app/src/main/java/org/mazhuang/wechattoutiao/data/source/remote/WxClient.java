@@ -5,9 +5,9 @@ import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mazhuang.wechattoutiao.data.WxArticlesResult;
-import org.mazhuang.wechattoutiao.data.WxChannel;
-import org.mazhuang.wechattoutiao.data.WxChannelsResult;
+import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
+import org.mazhuang.wechattoutiao.data.model.WxChannel;
+import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
 import org.mazhuang.wechattoutiao.util.Security;
 
 import okhttp3.RequestBody;

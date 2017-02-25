@@ -1,7 +1,7 @@
 package org.mazhuang.wechattoutiao.data.source.remote;
 
-import org.mazhuang.wechattoutiao.data.WxArticlesResult;
-import org.mazhuang.wechattoutiao.data.WxChannelsResult;
+import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
+import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;

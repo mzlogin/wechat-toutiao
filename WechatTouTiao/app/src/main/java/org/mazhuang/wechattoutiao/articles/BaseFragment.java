@@ -3,7 +3,7 @@ package org.mazhuang.wechattoutiao.articles;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import org.mazhuang.wechattoutiao.data.WxChannel;
+import org.mazhuang.wechattoutiao.data.model.WxChannel;
 
 /**
  * Created by mazhuang on 2017/2/13.

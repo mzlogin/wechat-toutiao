@@ -6,12 +6,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
-import org.mazhuang.wechattoutiao.data.WxArticlesResult;
+import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 import org.mazhuang.wechattoutiao.data.source.remote.WxClient;
 
 import retrofit2.Call;

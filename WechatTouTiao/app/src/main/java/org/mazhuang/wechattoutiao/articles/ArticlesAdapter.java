@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import org.mazhuang.wechattoutiao.articledetail.ArticleActivity;
 import org.mazhuang.wechattoutiao.R;
-import org.mazhuang.wechattoutiao.data.WxArticle;
-import org.mazhuang.wechattoutiao.data.WxArticlesResult;
+import org.mazhuang.wechattoutiao.data.model.WxArticle;
+import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 
 /**
  * Created by mazhuang on 2017/2/6.
