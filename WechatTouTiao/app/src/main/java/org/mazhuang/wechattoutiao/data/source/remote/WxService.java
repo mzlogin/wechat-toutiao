@@ -3,6 +3,7 @@ package org.mazhuang.wechattoutiao.data.source.remote;
 import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
 
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,8 +16,8 @@ import retrofit2.http.Query;
 
 public interface WxService {
     @POST("/channel")
-    Call<WxChannelsResult> getChannels(@Query("mid") String mid, @Body RequestBody body);
+    Observable<WxChannelsResult> getChannels(@Query("mid") String mid, @Body RequestBody body);
 
     @POST("/data")
-    Call<WxArticlesResult> getArticles(@Query("mid") String mid, @Body RequestBody body);
+    Observable<WxArticlesResult> getArticles(@Query("mid") String mid, @Body RequestBody body);
 }

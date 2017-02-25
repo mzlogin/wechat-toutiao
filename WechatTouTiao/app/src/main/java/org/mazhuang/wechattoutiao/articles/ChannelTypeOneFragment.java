@@ -1,5 +1,6 @@
 package org.mazhuang.wechattoutiao.articles;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,18 +11,22 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
+import org.mazhuang.wechattoutiao.data.model.WxArticle;
 import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
-import org.mazhuang.wechattoutiao.data.source.remote.WxClient;
+import org.mazhuang.wechattoutiao.data.model.WxChannel;
+import org.mazhuang.wechattoutiao.data.source.remote.RemoteDataSource;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by mazhuang on 2017/2/6.
  */
 
-public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener,
+        ArticlesContract.View {
 
     private ArticlesAdapter mAdapter;
 
@@ -29,6 +34,8 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
     private SwipeRefreshLayout mEmptyLayout;
 
     private boolean mFirstFetchFinished = false;
+
+    private ArticlesContract.Presenter mPresenter;
 
     @Nullable
     @Override
@@ -47,35 +54,16 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
         list.setAdapter(mAdapter);
         list.setEmptyView(mEmptyLayout);
 
-        fetchData();
+        mPresenter = new ArticlesPresenter(this);
 
         return rootView;
     }
 
-    private void fetchData() {
-        WxClient.getArticles(new Callback<WxArticlesResult>() {
-            @Override
-            public void onResponse(Call<WxArticlesResult> call, Response<WxArticlesResult> response) {
-                if (response.body() != null && response.body().isSuccessful()) {
-                    mAdapter.setData(response.body());
-                } else {
-                    if (getActivity() != null) {
-                        Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                finishRefresh();
-                mFirstFetchFinished = true;
-            }
+    @Override
+    public void onResume() {
+        super.onResume();
 
-            @Override
-            public void onFailure(Call<WxArticlesResult> call, Throwable t) {
-                if (getActivity() != null) {
-                    Toast.makeText(getContext(), "获取文章列表失败", Toast.LENGTH_SHORT).show();
-                }
-                finishRefresh();
-                mFirstFetchFinished = true;
-            }
-        }, mChannelInfo);
+        mPresenter.start();
     }
 
     private void initSwipeLayout(SwipeRefreshLayout swipeRefreshLayout) {
@@ -89,7 +77,7 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
     @Override
     public void onRefresh() {
         if (mFirstFetchFinished && mAdapter.getCount() == 0) {
-            fetchData();
+            mPresenter.loadArticles();
         } else {
             finishRefresh();
         }
@@ -98,5 +86,30 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
     private void finishRefresh() {
         mRefreshLayout.setRefreshing(false);
         mEmptyLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showArticles(List<WxArticle> articles) {
+        mAdapter.setData(articles);
+    }
+
+    @Override
+    public void showNoArticles() {
+        mAdapter.setData(null);
+    }
+
+    @Override
+    public void showLoadingArticlesError() {
+        mAdapter.setData(null);
+    }
+
+    @Override
+    public WxChannel getChannelInfo() {
+        return mChannelInfo;
+    }
+
+    @Override
+    public void setPresenter(ArticlesContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

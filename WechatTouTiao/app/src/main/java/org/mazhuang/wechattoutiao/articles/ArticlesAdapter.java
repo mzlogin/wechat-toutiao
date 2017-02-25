@@ -12,31 +12,33 @@ import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.data.model.WxArticle;
 import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 
+import java.util.List;
+
 /**
  * Created by mazhuang on 2017/2/6.
  */
 
 public class ArticlesAdapter extends BaseAdapter {
 
-    private WxArticlesResult mData;
+    private List<WxArticle> mData;
 
-    public void setData(WxArticlesResult data) {
+    public void setData(List<WxArticle> data) {
         mData = data;
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        if (mData == null || mData.result == null || mData.result.article_list == null) {
+        if (mData == null) {
             return 0;
         } else {
-            return mData.result.article_list.size();
+            return mData.size();
         }
     }
 
     @Override
     public Object getItem(int position) {
-        return mData.result.article_list.get(position);
+        return mData.get(position);
     }
 
     @Override

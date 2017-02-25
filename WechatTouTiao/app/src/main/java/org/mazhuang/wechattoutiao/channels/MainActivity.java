@@ -4,24 +4,22 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.articles.BaseFragment;
-import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
-import org.mazhuang.wechattoutiao.data.source.remote.WxClient;
+import org.mazhuang.wechattoutiao.data.model.WxChannel;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ChannelsContract.View {
     public String TAG = getClass().getSimpleName();
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ChannelPagerAdapter mChannelAdapter;
+
+    private ChannelsContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
 
-        fetchData();
+        mPresenter = new ChannelsPresenter(this);
+
+        mPresenter.start();
     }
 
     private void initViews() {
@@ -42,25 +42,6 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    private void fetchData() {
-        WxClient.getChannels(new Callback<WxChannelsResult>() {
-            @Override
-            public void onResponse(Call<WxChannelsResult> call, Response<WxChannelsResult> response) {
-                Log.d(TAG, response.body().toString());
-                if (response.body() != null && response.body().isSuccessful()) {
-                    mChannelAdapter.setData(response.body());
-                } else {
-                    Toast.makeText(MainActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<WxChannelsResult> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     @Override
     public void onBackPressed() {
         BaseFragment currentFragment = (BaseFragment) mChannelAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
@@ -69,5 +50,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    public void setPresenter(ChannelsContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
+    public void showChannels(List<WxChannel> channels) {
+        mChannelAdapter.setData(channels);
+    }
+
+    @Override
+    public void showNoChannels() {
+        Toast.makeText(MainActivity.this, "没有频道信息", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLoadingChannelsError() {
+        Toast.makeText(MainActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
     }
 }
