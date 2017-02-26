@@ -8,8 +8,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import org.mazhuang.wechattoutiao.R;
+import org.mazhuang.wechattoutiao.base.BaseActivity;
 
-public class ArticleActivity extends AppCompatActivity {
+public class ArticleActivity extends BaseActivity {
 
     public static final String URL = "url";
 

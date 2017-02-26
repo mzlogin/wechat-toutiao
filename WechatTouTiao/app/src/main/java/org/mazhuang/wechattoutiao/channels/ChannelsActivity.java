@@ -8,12 +8,12 @@ import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.articles.BaseFragment;
+import org.mazhuang.wechattoutiao.base.BaseActivity;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ChannelsContract.View {
-    public String TAG = getClass().getSimpleName();
+public class ChannelsActivity extends BaseActivity implements ChannelsContract.View {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity implements ChannelsContract.
 
     @Override
     public void showNoChannels() {
-        Toast.makeText(MainActivity.this, "没有频道信息", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ChannelsActivity.this, "没有频道信息", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showLoadingChannelsError() {
-        Toast.makeText(MainActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ChannelsActivity.this, "获取频道失败", Toast.LENGTH_SHORT).show();
     }
 }

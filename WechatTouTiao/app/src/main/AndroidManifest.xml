@@ -10,15 +10,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".channels.MainActivity">
+        <activity android:name=".SplashActivity" android:theme="@style/Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".channels.ChannelsActivity" />
         <activity android:name=".articledetail.ArticleActivity" />
-        <activity android:name=".articledetail.PicNewsReadActivity"></activity>
+        <activity android:name=".articledetail.PicNewsReadActivity" />
     </application>
 
 </manifest>
