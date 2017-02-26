@@ -17,13 +17,13 @@ public interface IDataSource {
     }
 
     interface LoadArticlesCallBack {
-        void onArticlesLoaded(List<WxArticle> articles);
+        void onArticlesLoaded(List<WxArticle> articles, int addCount);
         void onDataNotAvailable();
     }
 
     void getChannels(LoadChannelsCallback callback);
 
-    void getArticles(WxChannel channelInfo, int endStreamId, LoadArticlesCallBack callback);
+    void getArticles(WxChannel channelInfo, int endStreamId, boolean focusRefresh, LoadArticlesCallBack callback);
 
-    void getMoreArticles(WxChannel channelInfo, int endStreamId, LoadArticlesCallBack callback);
+    void getMoreArticles(WxChannel channelInfo, long startTime, int endStreamId, LoadArticlesCallBack callback);
 }

@@ -10,6 +10,7 @@ import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
 import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
 import org.mazhuang.wechattoutiao.util.Security;
+import org.mazhuang.wechattoutiao.util.TimeUtil;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -78,7 +79,10 @@ public class RemoteDataSource implements IDataSource {
     }
 
     @Override
-    public void getArticles(WxChannel channelInfo, int endStreamId, final LoadArticlesCallBack callback) {
+    public void getArticles(WxChannel channelInfo,
+                            int endStreamId,
+                            boolean focusRefresh,
+                            final LoadArticlesCallBack callback) {
         getArticles(channelInfo, endStreamId, new Observer<WxArticlesResult>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -88,7 +92,7 @@ public class RemoteDataSource implements IDataSource {
             @Override
             public void onNext(WxArticlesResult wxArticlesResult) {
                 if (wxArticlesResult.isSuccessful()) {
-                    callback.onArticlesLoaded(wxArticlesResult.result.article_list);
+                    callback.onArticlesLoaded(wxArticlesResult.result.article_list, 0);
                 } else {
                     callback.onDataNotAvailable();
                 }
@@ -107,8 +111,8 @@ public class RemoteDataSource implements IDataSource {
     }
 
     @Override
-    public void getMoreArticles(WxChannel channelInfo, int endStreamId, final LoadArticlesCallBack callback) {
-        getMoreArticles(channelInfo, endStreamId, new Observer<WxArticlesResult>() {
+    public void getMoreArticles(WxChannel channelInfo, long startTime, int endStreamId, final LoadArticlesCallBack callback) {
+        getMoreArticles(channelInfo, startTime, endStreamId, new Observer<WxArticlesResult>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -117,7 +121,7 @@ public class RemoteDataSource implements IDataSource {
             @Override
             public void onNext(WxArticlesResult wxArticlesResult) {
                 if (wxArticlesResult.isSuccessful()) {
-                    callback.onArticlesLoaded(wxArticlesResult.result.article_list);
+                    callback.onArticlesLoaded(wxArticlesResult.result.article_list, 0);
                 } else {
                     callback.onDataNotAvailable();
                 }
@@ -175,9 +179,9 @@ public class RemoteDataSource implements IDataSource {
         }
     }
 
-    private void getMoreArticles(WxChannel channelInfo, int endStreamId, Observer<WxArticlesResult> observer) {
+    private void getMoreArticles(WxChannel channelInfo, long startTime, int endStreamId, Observer<WxArticlesResult> observer) {
         try {
-            JSONObject jsonObject = getMoreArticlesBody(channelInfo, endStreamId);
+            JSONObject jsonObject = getMoreArticlesBody(channelInfo, startTime, endStreamId);
 
             Log.d(TAG, "getMoreArticles jsonObject: " + jsonObject.toString());
 
@@ -241,13 +245,13 @@ public class RemoteDataSource implements IDataSource {
         return jsonObject;
     }
 
-    public static JSONObject getMoreArticlesBody(WxChannel channel, int endStreamId) throws JSONException {
+    public static JSONObject getMoreArticlesBody(WxChannel channel, long startTime, int endStreamId) throws JSONException {
         JSONObject jsonObject = getCommonBody();
         jsonObject.put(BODY_FIELD_NEEDCATLIST, false);
         jsonObject.put(BODY_FIELD_ACTION, 2);
-        jsonObject.put(BODY_FIELD_END_STREAM_ID, endStreamId);
-        jsonObject.put(BODY_FIELD_START_TIME, "2017-01-22 20:45:31"); // TODO
-        jsonObject.put(BODY_FIELD_START_STREAM_ID, 1); // TODO
+        jsonObject.put(BODY_FIELD_END_STREAM_ID, -1);
+        jsonObject.put(BODY_FIELD_START_TIME, TimeUtil.longDateFormat(startTime));
+        jsonObject.put(BODY_FIELD_START_STREAM_ID, endStreamId);
 
         JSONObject channelObj = new JSONObject();
         channelObj.put("id", channel.id);

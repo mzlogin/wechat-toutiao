@@ -6,7 +6,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.data.model.WxArticle;
@@ -30,6 +32,9 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
 
     private ArticlesContract.Presenter mPresenter;
 
+    private Button mLoadMoreButton;
+    private TextView mNoMoreTextView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,6 +48,7 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
         initSwipeLayout(mEmptyLayout);
 
         ListView list = (ListView) rootView.findViewById(R.id.articles);
+        initFootView(list, inflater);
         mAdapter = new ArticlesAdapter();
         list.setAdapter(mAdapter);
         list.setEmptyView(mEmptyLayout);
@@ -67,6 +73,20 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
                 android.R.color.holo_red_light);
     }
 
+    private void initFootView(ListView list, LayoutInflater inflater) {
+        View footView = inflater.inflate(R.layout.list_load_more_footer, null, false);
+        list.addFooterView(footView);
+        mLoadMoreButton = (Button) footView.findViewById(R.id.load_more);
+        mLoadMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLoadMoreButton.setEnabled(false);
+                mPresenter.loadMoreArticles();
+            }
+        });
+        mNoMoreTextView = (TextView) footView.findViewById(R.id.no_more);
+    }
+
     @Override
     public void onRefresh() {
         if (!mFirstFetchFinished) {
@@ -74,9 +94,9 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
         }
 
         if (mAdapter.getCount() == 0) {
-            mPresenter.loadArticles();
+            mPresenter.loadArticles(false);
         } else {
-            mPresenter.loadMoreArticles();
+            mPresenter.loadArticles(true);
         }
     }
 
@@ -110,16 +130,20 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
     public void showMoreArticles(List<WxArticle> articles) {
         mAdapter.setData(articles);
         finishRefresh();
+        mLoadMoreButton.setEnabled(true);
     }
 
     @Override
     public void showNoMoreArticles() {
         finishRefresh();
+        mLoadMoreButton.setVisibility(View.GONE);
+        mNoMoreTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showLoadingMoreArticlesError() {
         finishRefresh();
+        mLoadMoreButton.setEnabled(true);
     }
 
     @Override

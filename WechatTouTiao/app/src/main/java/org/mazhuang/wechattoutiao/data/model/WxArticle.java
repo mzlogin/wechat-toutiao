@@ -6,7 +6,7 @@ import java.util.List;
  * Created by mazhuang on 2017/1/23.
  */
 
-public class WxArticle {
+public class WxArticle implements Comparable<WxArticle> {
     String account_openid;
     String appendix;
     List<String> img_list;
@@ -14,7 +14,7 @@ public class WxArticle {
     public String link;
     public String open_link;
     String pub_source;
-    long pub_time;
+    public long pub_time;
     int read_num;
     public int stream_id;
     List<KeywordTag> subscribe_list;
@@ -39,5 +39,16 @@ public class WxArticle {
         String color;
         String icon;
         int tag_id;
+    }
+
+    @Override
+    public int compareTo(WxArticle wxArticle) {
+        if (this.pub_time > wxArticle.pub_time) {
+            return -1;
+        } else if (this.pub_time < wxArticle.pub_time) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

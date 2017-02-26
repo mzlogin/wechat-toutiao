@@ -3,7 +3,6 @@ package org.mazhuang.wechattoutiao.articles;
 import org.mazhuang.wechattoutiao.data.DataSource;
 import org.mazhuang.wechattoutiao.data.IDataSource;
 import org.mazhuang.wechattoutiao.data.model.WxArticle;
-import org.mazhuang.wechattoutiao.data.model.WxChannel;
 
 import java.util.List;
 
@@ -21,13 +20,14 @@ public class ArticlesPresenter implements ArticlesContract.Presenter {
     }
 
     @Override
-    public void loadArticles() {
+    public void loadArticles(boolean focus) {
         DataSource.getInstance().getArticles(
                 mArticlesView.getChannelInfo(),
                 -1,
+                focus,
                 new IDataSource.LoadArticlesCallBack() {
                     @Override
-                    public void onArticlesLoaded(List<WxArticle> articles) {
+                    public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
                         if (articles == null || articles.size() == 0) {
                             mArticlesView.showNoArticles();
                         } else {
@@ -46,12 +46,13 @@ public class ArticlesPresenter implements ArticlesContract.Presenter {
     public void loadMoreArticles() {
         DataSource.getInstance().getMoreArticles(
                 mArticlesView.getChannelInfo(),
+                0,
                 -1,
                 new IDataSource.LoadArticlesCallBack() {
                     @Override
-                    public void onArticlesLoaded(List<WxArticle> articles) {
-                        if (articles == null || articles.size() == 0) {
-                            mArticlesView.showNoMoreArticles();;
+                    public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
+                        if (addCount <= 0) {
+                            mArticlesView.showNoMoreArticles();
                         } else {
                             mArticlesView.showMoreArticles(articles);
                         }
@@ -67,6 +68,6 @@ public class ArticlesPresenter implements ArticlesContract.Presenter {
 
     @Override
     public void start() {
-        loadArticles();
+        loadArticles(false);
     }
 }

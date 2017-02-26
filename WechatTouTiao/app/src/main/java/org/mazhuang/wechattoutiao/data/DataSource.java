@@ -8,6 +8,7 @@ import org.mazhuang.wechattoutiao.data.source.local.LocalDataSource;
 import org.mazhuang.wechattoutiao.data.source.remote.RemoteDataSource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,36 +65,47 @@ public class DataSource implements IDataSource {
 
     @Override
     public void getArticles(final WxChannel channelInfo,
-                            int endStreamId,
+                            int endStreamId, // ignore
+                            final boolean focusRefresh,
                             @NonNull final LoadArticlesCallBack callback) {
-        if (mCachedArticles != null && mCachedArticles.containsKey(channelInfo.id)) {
-            callback.onArticlesLoaded(mCachedArticles.get(channelInfo.id));
-            return;
+        if (focusRefresh) {
+            getArticlesFromRemote(channelInfo, getEndStreamId(channelInfo.id), focusRefresh, callback);
+        } else {
+            if (mCachedArticles != null && mCachedArticles.containsKey(channelInfo.id)) {
+                callback.onArticlesLoaded(mCachedArticles.get(channelInfo.id), 0);
+                return;
+            }
+
+            mLocalDataSource.getArticles(
+                    channelInfo,
+                    getEndStreamId(channelInfo.id),
+                    focusRefresh,
+                    new LoadArticlesCallBack() {
+                        @Override
+                        public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
+                            addCount = addArticlesCache(channelInfo.id, articles);
+                            callback.onArticlesLoaded(mCachedArticles.get(channelInfo.id), addCount);
+                        }
+
+                        @Override
+                        public void onDataNotAvailable() {
+                            getArticlesFromRemote(channelInfo, getEndStreamId(channelInfo.id), focusRefresh, callback);
+                        }
+                    });
         }
-
-        mLocalDataSource.getArticles(
-                channelInfo,
-                channelInfo.id,
-                new LoadArticlesCallBack() {
-                    @Override
-                    public void onArticlesLoaded(List<WxArticle> articles) {
-                        refreshArticlesCache(channelInfo.id, articles);
-                        callback.onArticlesLoaded(articles);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable() {
-                        getArticlesFromRemote(channelInfo, getEndStreamId(channelInfo.id), callback);
-                    }
-        });
 
     }
 
     @Override
     public void getMoreArticles(WxChannel channelInfo,
-                                int endSteamId,
+                                long startTime, // ignore
+                                int endSteamId, // ignore
                                 @NonNull LoadArticlesCallBack callback) {
-        getMoreArticlesFromRemote(channelInfo, endSteamId, callback);
+        getMoreArticlesFromRemote(
+                channelInfo,
+                getMoreStartTime(channelInfo.id),
+                getEndStreamId(channelInfo.id),
+                callback);
     }
 
     private void getChannelsFromRemote(@NonNull final LoadChannelsCallback callback) {
@@ -117,19 +129,24 @@ public class DataSource implements IDataSource {
 
     private void getArticlesFromRemote(final WxChannel channelInfo,
                                        int endStreamId,
+                                       final boolean focusRefresh,
                                        @NonNull final LoadArticlesCallBack callBack) {
         mRemoteDataSource.getArticles(
                 channelInfo,
                 endStreamId,
+                focusRefresh,
                 new LoadArticlesCallBack() {
                     @Override
-                    public void onArticlesLoaded(List<WxArticle> articles) {
+                    public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
                         if (articles == null || articles.size() == 0) {
-                            callBack.onDataNotAvailable();
+                            if (!focusRefresh) {
+                                callBack.onDataNotAvailable();
+                                return;
+                            }
                         } else {
-                            refreshArticlesCache(channelInfo.id, articles);
-                            callBack.onArticlesLoaded(articles);
+                            addCount = addArticlesCache(channelInfo.id, articles);
                         }
+                        callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id), addCount);
                     }
 
                     @Override
@@ -140,25 +157,25 @@ public class DataSource implements IDataSource {
     }
 
     private void getMoreArticlesFromRemote(final WxChannel channelInfo,
+                                           long startTime,
                                            int endStreamId,
                                            @NonNull final LoadArticlesCallBack callBack) {
         mRemoteDataSource.getMoreArticles(
                 channelInfo,
+                startTime,
                 endStreamId,
                 new LoadArticlesCallBack() {
                     @Override
-                    public void onArticlesLoaded(List<WxArticle> articles) {
-                        if (articles == null || articles.size() == 0) {
-                            callBack.onDataNotAvailable();
-                        } else {
-                            addArticlesCache(channelInfo.id, articles);
-                            callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id));
+                    public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
+                        if (articles != null && articles.size() != 0) {
+                            addCount = addArticlesCache(channelInfo.id, articles);
                         }
+                        callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id), addCount);
                     }
 
                     @Override
                     public void onDataNotAvailable() {
-                        callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id));
+                        callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id), 0);
                     }
                 }
         );
@@ -175,29 +192,28 @@ public class DataSource implements IDataSource {
         mCachedChannels = channels;
     }
 
-    private void refreshArticlesCache(int channelId, List<WxArticle> articles) {
-
+    private int addArticlesCache(int channelId, List<WxArticle> articles) {
         if (mCachedArticles == null) {
             mCachedArticles = new LinkedHashMap<>();
         }
 
-        if (mCachedArticles.containsKey(channelId)) {
-            mCachedArticles.get(channelId).clear();
-        }
-
-        mCachedArticles.put(channelId, articles);
-    }
-
-    private void addArticlesCache(int channelId, List<WxArticle> articles) {
-        if (mCachedArticles == null) {
-            mCachedArticles = new LinkedHashMap<>();
-        }
+        int addCount;
 
         if (!mCachedArticles.containsKey(channelId)) {
             mCachedArticles.put(channelId, articles);
+            addCount = articles.size();
         } else {
-            mCachedArticles.get(channelId).addAll(articles);
+            List<WxArticle> articleList = mCachedArticles.get(channelId);
+            int oldCount = articleList.size();
+
+            articleList.removeAll(articles);
+            articleList.addAll(articles);
+            Collections.sort(articleList);
+
+            addCount = articleList.size() - oldCount;
         }
+
+        return addCount;
     }
 
     private int getEndStreamId(int channelId) {
@@ -206,5 +222,14 @@ public class DataSource implements IDataSource {
             endStreamId = mCachedArticles.get(channelId).get(0).stream_id;
         }
         return endStreamId;
+    }
+
+    private long getMoreStartTime(int channelId) {
+        long pubTime = 0;
+        if (mCachedArticles != null && mCachedArticles.containsKey(channelId)) {
+            List<WxArticle> list = mCachedArticles.get(channelId);
+            pubTime = list.get(list.size() - 1).pub_time;
+        }
+        return pubTime;
     }
 }

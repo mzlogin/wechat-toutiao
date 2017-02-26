@@ -34,7 +34,7 @@ public interface ArticlesContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadArticles();
+        void loadArticles(boolean focus);
 
         void loadMoreArticles();
 

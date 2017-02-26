@@ -3,4 +3,6 @@
     <string name="no_content">暂无内容，下拉刷新。</string>
 
     <string name="unimplemented">尚未推出，敬请期待！</string>
+    <string name="load_more">点击加载更多</string>
+    <string name="no_more">没有历史内容了，刷新试试吧~</string>
 </resources>

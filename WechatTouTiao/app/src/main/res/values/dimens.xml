@@ -5,4 +5,5 @@
 
     <dimen name="list_item_margin">2dp</dimen>
     <dimen name="list_item_padding_hor">16dp</dimen>
+    <dimen name="list_footer_height">60dp</dimen>
 </resources>
