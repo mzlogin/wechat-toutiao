@@ -1,8 +1,5 @@
 package org.mazhuang.wechattoutiao.data.model;
 
-import org.mazhuang.wechattoutiao.data.model.BaseResult;
-import org.mazhuang.wechattoutiao.data.model.WxArticle;
-
 import java.util.List;
 
 /**

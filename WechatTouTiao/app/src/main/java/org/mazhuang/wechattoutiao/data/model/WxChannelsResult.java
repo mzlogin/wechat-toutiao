@@ -24,15 +24,15 @@ public class WxChannelsResult extends BaseResult {
     }
 
     static class AuxiliaryModules {
-        List<String> comment;
-        List<String> relate_article;
-        List<String> relate_tag;
-        List<String> share;
+        public List<String> comment;
+        public List<String> relate_article;
+        public List<String> relate_tag;
+        public List<String> share;
     }
 
     static class NewChannel {
-        String alert;
-        int id;
-        String name;
+        public String alert;
+        public int id;
+        public String name;
     }
 }

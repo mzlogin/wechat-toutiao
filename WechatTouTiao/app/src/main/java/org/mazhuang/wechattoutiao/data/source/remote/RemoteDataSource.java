@@ -6,11 +6,15 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mazhuang.wechattoutiao.data.IDataSource;
+import org.mazhuang.wechattoutiao.data.model.WxArticle;
 import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
 import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
 import org.mazhuang.wechattoutiao.util.Security;
 import org.mazhuang.wechattoutiao.util.TimeUtil;
+
+import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -137,6 +141,11 @@ public class RemoteDataSource implements IDataSource {
 
             }
         });
+    }
+
+    @Override
+    public void saveAll(List<WxChannel> channels, Map<Integer, List<WxArticle>> articles) {
+
     }
 
     private void getChannels(Observer<WxChannelsResult> observer) {

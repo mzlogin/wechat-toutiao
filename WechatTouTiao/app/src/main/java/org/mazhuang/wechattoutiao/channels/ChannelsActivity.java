@@ -34,6 +34,13 @@ public class ChannelsActivity extends BaseActivity implements ChannelsContract.V
         mPresenter.start();
     }
 
+    @Override
+    protected void onStop() {
+        super.onPause();
+
+        mPresenter.saveAllData();
+    }
+
     private void initViews() {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mTabLayout = (TabLayout) findViewById(R.id.tab);

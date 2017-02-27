@@ -7,8 +7,8 @@ package org.mazhuang.wechattoutiao.data.model;
 public class BaseResult {
     public static int STATUS_SUCCESS = 1;
 
-    String msg;
-    int status;
+    public String msg;
+    public int status;
 
     public boolean isSuccessful() {
         return (status == STATUS_SUCCESS);

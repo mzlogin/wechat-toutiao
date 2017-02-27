@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import org.mazhuang.wechattoutiao.data.model.WxArticle;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
+import org.mazhuang.wechattoutiao.data.model.realm.RealmArticles;
 import org.mazhuang.wechattoutiao.data.source.local.LocalDataSource;
 import org.mazhuang.wechattoutiao.data.source.remote.RemoteDataSource;
 
@@ -12,6 +13,9 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by mazhuang on 2017/2/25.
@@ -49,16 +53,26 @@ public class DataSource implements IDataSource {
             return;
         }
 
-        mLocalDataSource.getChannels(new LoadChannelsCallback() {
+        getChannelsFromRemote(new LoadChannelsCallback() {
             @Override
             public void onChannelsLoaded(List<WxChannel> channels) {
-                refreshChannelsCache(channels);
                 callback.onChannelsLoaded(channels);
             }
 
             @Override
             public void onDataNotAvailable() {
-                getChannelsFromRemote(callback);
+                mLocalDataSource.getChannels(new LoadChannelsCallback() {
+                    @Override
+                    public void onChannelsLoaded(List<WxChannel> channels) {
+                        refreshChannelsCache(channels);
+                        callback.onChannelsLoaded(channels);
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        callback.onDataNotAvailable();
+                    }
+                });
             }
         });
     }
@@ -108,6 +122,11 @@ public class DataSource implements IDataSource {
                 callback);
     }
 
+    @Override
+    public void saveAll(List<WxChannel> channels, Map<Integer, List<WxArticle>> articles) {
+        mLocalDataSource.saveAll(mCachedChannels, mCachedArticles);
+    }
+
     private void getChannelsFromRemote(@NonNull final LoadChannelsCallback callback) {
         mRemoteDataSource.getChannels(new LoadChannelsCallback() {
             @Override
@@ -151,7 +170,9 @@ public class DataSource implements IDataSource {
 
                     @Override
                     public void onDataNotAvailable() {
-                        callBack.onDataNotAvailable();
+                        if (!focusRefresh) {
+                            callBack.onDataNotAvailable();
+                        }
                     }
                 });
     }

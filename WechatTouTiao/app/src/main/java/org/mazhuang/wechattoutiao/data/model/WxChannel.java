@@ -67,10 +67,10 @@ public class WxChannel implements Parcelable {
     };
 
     static class Entrance implements Parcelable {
-        String target_url;
-        String title;
-        String icon;
-        int is_local;
+        public String target_url;
+        public String title;
+        public String icon;
+        public int is_local;
 
         Entrance(Parcel in) {
             target_url = in.readString();

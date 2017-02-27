@@ -7,38 +7,38 @@ import java.util.List;
  */
 
 public class WxArticle implements Comparable<WxArticle> {
-    String account_openid;
-    String appendix;
-    List<String> img_list;
-    KeywordTag keyword_tag;
+    public String account_openid;
+    public String appendix;
+    public List<String> img_list;
+    public KeywordTag keyword_tag;
     public String link;
     public String open_link;
-    String pub_source;
+    public String pub_source;
     public long pub_time;
-    int read_num;
+    public int read_num;
     public int stream_id;
-    List<KeywordTag> subscribe_list;
-    Tag tag;
+    public List<KeywordTag> subscribe_list;
+    public Tag tag;
     public String title;
-    int type;
-    List<String> unlike_list;
-    int video_type;
+    public int type;
+    public List<String> unlike_list;
+    public int video_type;
 
     static class KeywordTag {
-        String appendix;
-        String h5_link;
-        String id;
-        String name;
-        int source;
-        int subscribe_num;
-        Tag tag;
-        int type;
+        public String appendix;
+        public String h5_link;
+        public String id;
+        public String name;
+        public int source;
+        public int subscribe_num;
+        public Tag tag;
+        public int type;
     }
 
     static class Tag {
-        String color;
-        String icon;
-        int tag_id;
+        public String color;
+        public String icon;
+        public int tag_id;
     }
 
     @Override

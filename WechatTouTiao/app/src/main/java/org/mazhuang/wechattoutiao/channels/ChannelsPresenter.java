@@ -41,6 +41,11 @@ public class ChannelsPresenter implements ChannelsContract.Presenter {
     }
 
     @Override
+    public void saveAllData() {
+        DataSource.getInstance().saveAll(null, null);
+    }
+
+    @Override
     public void start() {
         loadChannels();
     }

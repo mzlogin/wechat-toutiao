@@ -26,6 +26,8 @@ public interface ChannelsContract {
 
         void loadChannels();
 
+        void saveAllData();
+
     }
 
 }
