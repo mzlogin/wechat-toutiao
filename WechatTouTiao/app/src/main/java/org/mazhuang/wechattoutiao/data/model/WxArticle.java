@@ -23,6 +23,7 @@ public class WxArticle implements Comparable<WxArticle> {
     public int type;
     public List<String> unlike_list;
     public int video_type;
+    public boolean is_read;
 
     static class KeywordTag {
         public String appendix;

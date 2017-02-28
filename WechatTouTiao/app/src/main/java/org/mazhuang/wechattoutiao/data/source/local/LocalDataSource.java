@@ -10,7 +10,6 @@ import org.mazhuang.wechattoutiao.data.model.WxChannel;
 import org.mazhuang.wechattoutiao.data.model.realm.RealmArticles;
 import org.mazhuang.wechattoutiao.data.model.realm.RealmChannels;
 
-import java.lang.reflect.GenericSignatureFormatError;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,8 @@ import io.realm.RealmResults;
 public class LocalDataSource implements IDataSource {
 
     private Realm mRealm = Realm.getDefaultInstance();
+
+    private static final int MAX_ARTICLES_PER_CHANNEL = 100;
 
     @Override
     public void getChannels(final LoadChannelsCallback callback) {
@@ -105,9 +106,13 @@ public class LocalDataSource implements IDataSource {
 
                 if (articles != null) {
                     for (Map.Entry<Integer, List<WxArticle>> entry : articles.entrySet()) {
+                        List<WxArticle> wxArticles = entry.getValue();
+                        if (wxArticles.size() > MAX_ARTICLES_PER_CHANNEL) {
+                            wxArticles = wxArticles.subList(0, MAX_ARTICLES_PER_CHANNEL);
+                        }
                         RealmArticles articleList = new RealmArticles();
                         articleList.channelId = entry.getKey();
-                        articleList.gsonContent = gson.toJson(entry.getValue(), articlesType);
+                        articleList.gsonContent = gson.toJson(wxArticles, articlesType);
                         realm.copyToRealmOrUpdate(articleList);
                     }
                 }
