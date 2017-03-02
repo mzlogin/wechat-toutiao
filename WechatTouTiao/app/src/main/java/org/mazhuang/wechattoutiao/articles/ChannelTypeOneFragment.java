@@ -52,6 +52,7 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
         mAdapter = new ArticlesAdapter();
         list.setAdapter(mAdapter);
         list.setEmptyView(mEmptyLayout);
+        list.setOnItemClickListener(mAdapter);
 
         mPresenter = new ArticlesPresenter(this);
 

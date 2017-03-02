@@ -2,7 +2,6 @@ package org.mazhuang.wechattoutiao.articledetail;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,7 +11,7 @@ import org.mazhuang.wechattoutiao.base.BaseActivity;
 
 public class ArticleActivity extends BaseActivity {
 
-    public static final String URL = "url";
+    public static final String PARAM_URL = "url";
 
     private String mUrl;
 
@@ -31,7 +30,7 @@ public class ArticleActivity extends BaseActivity {
         if (intent != null) {
             Bundle args = intent.getExtras();
             if (args != null) {
-                mUrl = args.getString(URL, null);
+                mUrl = args.getString(PARAM_URL, null);
             }
         }
 

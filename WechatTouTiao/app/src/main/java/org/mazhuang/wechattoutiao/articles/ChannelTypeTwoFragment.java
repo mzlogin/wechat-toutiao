@@ -85,7 +85,7 @@ public class ChannelTypeTwoFragment extends BaseFragment {
 
             Context context = ChannelTypeTwoFragment.this.getContext();
             Intent intent = new Intent(context, PicNewsReadActivity.class);
-            intent.putExtra(PicNewsReadActivity.URL, url);
+            intent.putExtra(PicNewsReadActivity.PARAM_URL, url);
             startActivity(intent);
         }
     }

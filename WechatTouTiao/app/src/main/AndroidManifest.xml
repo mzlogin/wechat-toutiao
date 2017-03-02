@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".channels.ChannelsActivity" />
         <activity android:name=".articledetail.ArticleActivity" />
+        <activity android:name=".articledetail.VideoActivity" />
         <activity android:name=".articledetail.PicNewsReadActivity" />
     </application>
 

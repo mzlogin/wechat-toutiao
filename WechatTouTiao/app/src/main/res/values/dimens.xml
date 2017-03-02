@@ -4,6 +4,13 @@
     <dimen name="activity_vertical_margin">0dp</dimen>
 
     <dimen name="list_item_margin">2dp</dimen>
+    <dimen name="list_item_padding">16dp</dimen>
     <dimen name="list_item_padding_hor">16dp</dimen>
     <dimen name="list_footer_height">60dp</dimen>
+
+    <dimen name="big_img_width">336dp</dimen>
+    <dimen name="big_img_height">189dp</dimen>
+
+    <dimen name="small_img_width">90dp</dimen>
+    <dimen name="small_img_height">66dp</dimen>
 </resources>
