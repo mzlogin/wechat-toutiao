@@ -3,7 +3,6 @@ package org.mazhuang.wechattoutiao.channels;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.mazhuang.wechattoutiao.R;
@@ -25,7 +24,7 @@ public class ChannelsActivity extends BaseActivity implements ChannelsContract.V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_channels);
 
         initViews();
 
