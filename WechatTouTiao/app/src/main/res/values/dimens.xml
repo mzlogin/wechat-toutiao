@@ -13,4 +13,7 @@
 
     <dimen name="small_img_width">90dp</dimen>
     <dimen name="small_img_height">66dp</dimen>
+
+    <dimen name="article_title_size">16sp</dimen>
+    <dimen name="article_title_margin_bottom">8dp</dimen>
 </resources>

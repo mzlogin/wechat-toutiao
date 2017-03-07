@@ -14,5 +14,7 @@
 
     <style name="ArticleTitle">
         <item name="android:textColor">@color/text_4c4c4c</item>
+        <item name="android:textSize">@dimen/article_title_size</item>
+        <item name="android:layout_marginBottom">@dimen/article_title_margin_bottom</item>
     </style>
 </resources>

@@ -69,11 +69,12 @@ public class ArticlesAdapter extends BaseAdapter implements AdapterView.OnItemCl
     @Override
     public int getItemViewType(int position) {
         WxArticle article = mData.get(position);
-        if (article.type == 1 && article.video_type == 0) {
+        if (article.type == 1) { // include video article and normal article
             return 1;
         } else if (article.type == 3 && article.video_type == 0) {
             return 2;
-        } else if (article.video_type == 1) {
+        } else if ( (article.type == 11 && article.video_type == 1) ||
+                (article.type == 9 && article.video_type == 1)) {
             return 3;
         } else if (article.type == 2 && article.video_type == 0) {
             return 4;
