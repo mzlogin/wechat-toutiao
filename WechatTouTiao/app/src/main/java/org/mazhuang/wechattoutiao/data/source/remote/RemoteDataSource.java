@@ -10,6 +10,7 @@ import org.mazhuang.wechattoutiao.data.model.WxArticle;
 import org.mazhuang.wechattoutiao.data.model.WxArticlesResult;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
 import org.mazhuang.wechattoutiao.data.model.WxChannelsResult;
+import org.mazhuang.wechattoutiao.util.DeviceInfo;
 import org.mazhuang.wechattoutiao.util.Security;
 import org.mazhuang.wechattoutiao.util.TimeUtil;
 
@@ -42,8 +43,29 @@ public class RemoteDataSource implements IDataSource {
     private static final String BODY_FIELD_CHANNEL = "channel";
     private static final String BODY_FIELD_START_TIME = "start_time";
     private static final String BODY_FIELD_START_STREAM_ID = "start_stream_id";
+    private static final String BODY_FIELD_MID = "mid";
+    private static final String BODY_FIELD_XID = "xid";
+    private static final String BODY_FIELD_IMSI = "imsi";
+    private static final String BODY_FIELD_TIMEMILLIS = "timeMillis";
+    private static final String BODY_FIELD_OS = "os";
+    private static final String BODY_FIELD_REQ_VER = "req_ver";
+    private static final String BODY_FIELD_VER = "ver";
+    private static final String BODY_FIELD_OS_VER = "os_ver";
+    private static final String BODY_FIELD_LOCATION = "location";
+    private static final String BODY_FIELD_USERINFO = "userinfo";
+
+    private static final String BODY_FIELD_CHANNEL_ID = "id";
+    private static final String BODY_FIELD_CHANNEL_NAME = "name";
+    private static final String BODY_FIELD_CHANNEL_SUBID = "subid";
+
+    private static final String BODY_FIELD_USERINFO_NETWORK = "network";
+    private static final String BODY_FIELD_USERINFO_MODEL = "model";
+    private static final String BODY_FIELD_USERINFO_SCREEN_WIDTH = "screen_width";
+    private static final String BODY_FIELD_USERINFO_DISTRIBUTION = "distribution";
 
     private Retrofit mRetrofit;
+
+    private DeviceInfo mDevice;
 
     public RemoteDataSource() {
         mRetrofit = new Retrofit.Builder()
@@ -51,6 +73,7 @@ public class RemoteDataSource implements IDataSource {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+        mDevice = DeviceInfo.getInstance();
     }
 
     @Override
@@ -152,13 +175,13 @@ public class RemoteDataSource implements IDataSource {
         try {
             JSONObject jsonObject = getChannelsBody();
 
-            Log.d(TAG, "getChannels jsonObject: " + jsonObject.toString());
+            Log.v(TAG, "getChannels jsonObject: " + jsonObject.toString());
 
             RequestBody body = RequestBody.create(null, (BODY_PREFIX + Security.aesEnc(jsonObject.toString())).getBytes());
 
             WxService request = mRetrofit.create(WxService.class);
 
-            request.getChannels("ed2b99000712042888", body) // TODO
+            request.getChannels(mDevice.getMid(), body)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
@@ -172,13 +195,13 @@ public class RemoteDataSource implements IDataSource {
         try {
             JSONObject jsonObject = getArticlesBody(channelInfo, endStreamId);
 
-            Log.d(TAG, "getArticles jsonObject: " + jsonObject.toString());
+            Log.v(TAG, "getArticles jsonObject: " + jsonObject.toString());
 
             RequestBody body = RequestBody.create(null, (BODY_PREFIX + Security.aesEnc(jsonObject.toString())).getBytes());
 
             WxService request = mRetrofit.create(WxService.class);
 
-            request.getArticles("ed2b99000712042888", body) // TODO
+            request.getArticles(mDevice.getMid(), body)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
@@ -192,13 +215,13 @@ public class RemoteDataSource implements IDataSource {
         try {
             JSONObject jsonObject = getMoreArticlesBody(channelInfo, startTime, endStreamId);
 
-            Log.d(TAG, "getMoreArticles jsonObject: " + jsonObject.toString());
+            Log.v(TAG, "getMoreArticles jsonObject: " + jsonObject.toString());
 
             RequestBody body = RequestBody.create(null, (BODY_PREFIX + Security.aesEnc(jsonObject.toString().getBytes())));
 
             WxService request = mRetrofit.create(WxService.class);
 
-            request.getMoreArticles("ed2b99000712042888", body) // TODO
+            request.getMoreArticles(mDevice.getMid(), body)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
@@ -208,53 +231,53 @@ public class RemoteDataSource implements IDataSource {
         }
     }
 
-    public static JSONObject getCommonBody() throws JSONException {
+    public JSONObject getCommonBody() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("mid", "ed2b99000712042888"); // TODO
-        jsonObject.put("xid", "303b00c0881f01da1148bc8d8cc7c930387a"); // TODO
-        jsonObject.put("imsi", "460030971693100"); // TODO
-        jsonObject.put("timeMillis", String.valueOf(System.currentTimeMillis()));
-        jsonObject.put("os", "android");
-        jsonObject.put("req_ver", 3);
-        jsonObject.put("ver", "5101");
-        jsonObject.put("os_ver", Build.VERSION.SDK_INT);
-        jsonObject.put("location", "116.331,39.993"); // TODO
+        jsonObject.put(BODY_FIELD_MID, mDevice.getMid());
+        jsonObject.put(BODY_FIELD_XID, mDevice.getXid());
+        jsonObject.put(BODY_FIELD_IMSI, mDevice.getIMSI());
+        jsonObject.put(BODY_FIELD_TIMEMILLIS, String.valueOf(System.currentTimeMillis()));
+        jsonObject.put(BODY_FIELD_OS, "android");
+        jsonObject.put(BODY_FIELD_REQ_VER, 3);
+        jsonObject.put(BODY_FIELD_VER, "5101");
+        jsonObject.put(BODY_FIELD_OS_VER, Build.VERSION.SDK_INT);
+        jsonObject.put(BODY_FIELD_LOCATION, mDevice.getLocation());
 
         JSONObject user = new JSONObject();
-        user.put("network", 1);
-        user.put("model", "MI 5");
-        user.put("screen_width", 1080);
-        user.put("distribution", "3028");
+        user.put(BODY_FIELD_USERINFO_NETWORK, mDevice.getNetworkType());
+        user.put(BODY_FIELD_USERINFO_MODEL, mDevice.getModel());
+        user.put(BODY_FIELD_USERINFO_SCREEN_WIDTH, mDevice.getScreenWidth());
+        user.put(BODY_FIELD_USERINFO_DISTRIBUTION, mDevice.getDistribution());
 
-        jsonObject.put("userinfo", user);
+        jsonObject.put(BODY_FIELD_USERINFO, user);
 
         return jsonObject;
     }
 
-    public static JSONObject getChannelsBody() throws JSONException {
+    public JSONObject getChannelsBody() throws JSONException {
         JSONObject jsonObject = getCommonBody();
         jsonObject.put(BODY_FIELD_NEEDCATLIST, true);
 
         return jsonObject;
     }
 
-    public static JSONObject getArticlesBody(WxChannel channel, int endStreamId) throws JSONException {
+    public JSONObject getArticlesBody(WxChannel channel, int endStreamId) throws JSONException {
         JSONObject jsonObject = getCommonBody();
         jsonObject.put(BODY_FIELD_NEEDCATLIST, false);
         jsonObject.put(BODY_FIELD_ACTION, 1);
         jsonObject.put(BODY_FIELD_END_STREAM_ID, endStreamId);
 
         JSONObject channelObj = new JSONObject();
-        channelObj.put("id", channel.id);
-        channelObj.put("name", channel.name);
-        channelObj.put("subid", Integer.valueOf(channel.subid));
+        channelObj.put(BODY_FIELD_CHANNEL_ID, channel.id);
+        channelObj.put(BODY_FIELD_CHANNEL_NAME, channel.name);
+        channelObj.put(BODY_FIELD_CHANNEL_SUBID, Integer.valueOf(channel.subid));
 
         jsonObject.put(BODY_FIELD_CHANNEL, channelObj);
 
         return jsonObject;
     }
 
-    public static JSONObject getMoreArticlesBody(WxChannel channel, long startTime, int endStreamId) throws JSONException {
+    public JSONObject getMoreArticlesBody(WxChannel channel, long startTime, int endStreamId) throws JSONException {
         JSONObject jsonObject = getCommonBody();
         jsonObject.put(BODY_FIELD_NEEDCATLIST, false);
         jsonObject.put(BODY_FIELD_ACTION, 2);
@@ -263,9 +286,9 @@ public class RemoteDataSource implements IDataSource {
         jsonObject.put(BODY_FIELD_START_STREAM_ID, endStreamId);
 
         JSONObject channelObj = new JSONObject();
-        channelObj.put("id", channel.id);
-        channelObj.put("name", channel.name);
-        channelObj.put("subid", Integer.valueOf(channel.subid));
+        channelObj.put(BODY_FIELD_CHANNEL_ID, channel.id);
+        channelObj.put(BODY_FIELD_CHANNEL_NAME, channel.name);
+        channelObj.put(BODY_FIELD_CHANNEL_SUBID, Integer.valueOf(channel.subid));
 
         jsonObject.put(BODY_FIELD_CHANNEL, channelObj);
 

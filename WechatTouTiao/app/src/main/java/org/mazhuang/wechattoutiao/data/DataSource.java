@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import org.mazhuang.wechattoutiao.data.model.WxArticle;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
-import org.mazhuang.wechattoutiao.data.model.realm.RealmArticles;
 import org.mazhuang.wechattoutiao.data.source.local.LocalDataSource;
 import org.mazhuang.wechattoutiao.data.source.remote.RemoteDataSource;
 
@@ -13,9 +12,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by mazhuang on 2017/2/25.
