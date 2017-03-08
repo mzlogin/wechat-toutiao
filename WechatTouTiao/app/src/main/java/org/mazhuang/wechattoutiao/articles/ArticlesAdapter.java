@@ -1,6 +1,7 @@
 package org.mazhuang.wechattoutiao.articles;
 
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,9 @@ public class ArticlesAdapter extends BaseAdapter implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+        mData.get(position).is_read = true;
+
         Class<?> cls;
         if (getItemViewType(position) == 3) { // video
             cls = VideoActivity.class;
@@ -102,15 +106,47 @@ public class ArticlesAdapter extends BaseAdapter implements AdapterView.OnItemCl
         int layoutResId = mItemLayouts[getItemViewType(position)];
         switch (getItemViewType(position)) {
             case 1:
-                return getView1(position, convertView, viewGroup, layoutResId);
+                convertView = getView1(position, convertView, viewGroup, layoutResId);
+                break;
             case 2:
-                return getView2(position, convertView, viewGroup, layoutResId);
+                convertView = getView2(position, convertView, viewGroup, layoutResId);
+                break;
             case 3:
-                return getView3(position, convertView, viewGroup, layoutResId);
+                convertView = getView3(position, convertView, viewGroup, layoutResId);
+                break;
             case 4:
-                return getView4(position, convertView, viewGroup, layoutResId);
+                convertView = getView4(position, convertView, viewGroup, layoutResId);
+                break;
             default:
-                return getView0(position, convertView, viewGroup, layoutResId);
+                convertView = getView0(position, convertView, viewGroup, layoutResId);
+                break;
+        }
+
+        handleTitleColor(convertView, position);
+
+        return convertView;
+    }
+
+    private void handleTitleColor(View convertView, int position) {
+
+        Object holder = convertView.getTag();
+        if (holder instanceof ViewHolder0) {
+            ViewHolder0 viewHolder = (ViewHolder0) holder;
+
+            TextView title = viewHolder.mTitle;
+
+            int colorResId = mData.get(position).is_read ? R.color.article_title_read : R.color.article_title;
+            int color;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                color = title.getResources().getColor(colorResId, null);
+            } else {
+                color = title.getResources().getColor(colorResId);
+            }
+
+            if (color != title.getCurrentTextColor()) {
+                title.setTextColor(color);
+            }
         }
     }
 
@@ -268,23 +304,19 @@ public class ArticlesAdapter extends BaseAdapter implements AdapterView.OnItemCl
         TextView mTitle;
     }
 
-    private static class ViewHolder1 {
-        TextView mTitle;
+    private static class ViewHolder1 extends ViewHolder0 {
         ImageView mImg1;
     }
-    private static class ViewHolder2 {
-        TextView mTitle;
+    private static class ViewHolder2 extends ViewHolder0 {
         ImageView mImg1;
     }
 
-    private static class ViewHolder3 {
-        TextView mTitle;
+    private static class ViewHolder3 extends ViewHolder0 {
         ImageView mImg1;
         ImageView mPlay;
     }
 
-    private static class ViewHolder4 {
-        TextView mTitle;
+    private static class ViewHolder4 extends ViewHolder0 {
         ImageView mImg1;
         ImageView mImg2;
         ImageView mImg3;
