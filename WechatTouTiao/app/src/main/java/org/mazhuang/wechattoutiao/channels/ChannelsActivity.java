@@ -20,6 +20,8 @@ public class ChannelsActivity extends BaseActivity implements ChannelsContract.V
 
     private ChannelsContract.Presenter mPresenter;
 
+    private long mLastBackMillis;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,7 @@ public class ChannelsActivity extends BaseActivity implements ChannelsContract.V
 
     @Override
     protected void onStop() {
-        super.onPause();
+        super.onStop();
 
         mPresenter.saveAllData();
     }
@@ -52,6 +54,13 @@ public class ChannelsActivity extends BaseActivity implements ChannelsContract.V
     public void onBackPressed() {
         BaseFragment currentFragment = (BaseFragment) mChannelAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
         if (currentFragment != null && currentFragment.onBackPressed()) {
+            return;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - mLastBackMillis > 1000) {
+            Toast.makeText(this, getString(R.string.back_to_quit), Toast.LENGTH_SHORT).show();
+            mLastBackMillis = currentTime;
             return;
         }
 

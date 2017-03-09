@@ -6,4 +6,5 @@
     <string name="load_more">点击加载更多</string>
     <string name="no_more">没有历史内容了，刷新试试吧~</string>
     <string name="coordinate">%1$.3f,%2$.3f</string>
+    <string name="back_to_quit">再按一次返回键退出</string>
 </resources>
