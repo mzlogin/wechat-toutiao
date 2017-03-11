@@ -3,6 +3,8 @@ package org.mazhuang.wechattoutiao.articledetail;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -16,8 +18,10 @@ import java.net.URL;
 public class VideoActivity extends BaseActivity {
 
     public static final String PARAM_URL = "url";
+    public static final String PARAM_TITLE = "title";
 
     private String mUrl;
+    private String mTitle;
 
     private VideoView mVideoView;
     private MediaController mController;
@@ -39,8 +43,12 @@ public class VideoActivity extends BaseActivity {
             Bundle args = intent.getExtras();
             if (args != null) {
                 mUrl = args.getString(PARAM_URL, null);
+                mTitle = args.getString(PARAM_TITLE, null);
             }
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setupToolbar(toolbar, mTitle, mUrl);
 
         if (mUrl != null) {
             try {

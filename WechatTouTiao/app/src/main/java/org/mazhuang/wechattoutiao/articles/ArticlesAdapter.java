@@ -53,12 +53,9 @@ public class ArticlesAdapter extends BaseAdapter implements AdapterView.OnItemCl
         }
 
         Intent intent = new Intent(view.getContext(), cls);
-        intent.putExtra(ArticleActivity.PARAM_URL, getLink(position));
+        intent.putExtra(ArticleActivity.PARAM_URL, mData.get(position).link);
+        intent.putExtra(ArticleActivity.PARAM_TITLE, mData.get(position).title);
         view.getContext().startActivity(intent);
-    }
-
-    public String getLink(int position) {
-        return mData.get(position).link;
     }
 
     @Override

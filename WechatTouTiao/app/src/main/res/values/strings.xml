@@ -7,4 +7,8 @@
     <string name="no_more">没有历史内容了，刷新试试吧~</string>
     <string name="coordinate">%1$.3f,%2$.3f</string>
     <string name="back_to_quit">再按一次返回键退出</string>
+    <string name="share">分享</string>
+    <string name="share_template">%1$s\n\n%2$s</string>
+    <string name="share_to">分享到</string>
+    <string name="cannot_share">无法分享</string>
 </resources>
