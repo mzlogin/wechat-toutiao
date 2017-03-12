@@ -12,6 +12,7 @@ import android.webkit.WebViewClient;
 
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.base.BaseActivity;
+import org.mazhuang.wechattoutiao.util.ViewUtil;
 
 public class ArticleActivity extends BaseActivity {
 
@@ -20,6 +21,8 @@ public class ArticleActivity extends BaseActivity {
 
     private String mUrl;
     private String mTitle;
+
+    private WebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +41,11 @@ public class ArticleActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setupToolbar(toolbar, mTitle, mUrl);
 
-        final WebView webView = (WebView) findViewById(R.id.web_content);
-
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webView.setWebViewClient(new WebViewClient());
+        mWebView = (WebView) findViewById(R.id.web_content);
+        ViewUtil.setupWebView(this, mWebView);
 
         if (mUrl != null) {
-            webView.loadUrl(mUrl);
+            mWebView.loadUrl(mUrl);
         }
     }
 }

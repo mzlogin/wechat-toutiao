@@ -1,5 +1,6 @@
 package org.mazhuang.wechattoutiao.articles;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.articledetail.PicNewsReadActivity;
+import org.mazhuang.wechattoutiao.util.JSInvoker;
+import org.mazhuang.wechattoutiao.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by mazhuang on 2017/2/13.
@@ -34,16 +39,7 @@ public class ChannelTypeTwoFragment extends BaseFragment {
         View viewRoot = inflater.inflate(R.layout.fragment_channel_type_two, container, false);
 
         mWebView = (WebView) viewRoot.findViewById(R.id.web_content);
-
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-
-        String ua = webSettings.getUserAgentString();
-        ua += " SogouSearch Android1.0 version3.0 AppVersion/5101";
-        webSettings.setUserAgentString(ua);
-
-        mWebView.addJavascriptInterface(new JSInvoker(), "JSInvoker");
-        mWebView.setWebViewClient(new WebViewClient());
+        ViewUtil.setupWebView(getActivity(), mWebView);
 
         if (mChannelInfo.h5_link != null) {
             mWebView.loadUrl(mChannelInfo.h5_link);
@@ -60,33 +56,5 @@ public class ChannelTypeTwoFragment extends BaseFragment {
         }
 
         return super.onBackPressed();
-    }
-
-    public class JSInvoker {
-        @JavascriptInterface
-        public void openPictureNews(String entity) {
-            String url = null;
-            try {
-                JSONObject jsonObject = new JSONObject(entity);
-                String link = jsonObject.optString("link");
-                String openLink = jsonObject.optString("open_link");
-                if (!TextUtils.isEmpty(openLink)) {
-                    url = openLink;
-                } else {
-                    url = link;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if (TextUtils.isEmpty(url)) {
-                return;
-            }
-
-            Context context = ChannelTypeTwoFragment.this.getContext();
-            Intent intent = new Intent(context, PicNewsReadActivity.class);
-            intent.putExtra(PicNewsReadActivity.PARAM_URL, url);
-            startActivity(intent);
-        }
     }
 }
