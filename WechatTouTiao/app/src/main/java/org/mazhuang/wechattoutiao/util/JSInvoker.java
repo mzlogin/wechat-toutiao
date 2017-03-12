@@ -8,6 +8,7 @@ import android.webkit.JavascriptInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mazhuang.wechattoutiao.R;
+import org.mazhuang.wechattoutiao.articledetail.ArticleActivity;
 import org.mazhuang.wechattoutiao.articledetail.PicNewsReadActivity;
 
 import java.lang.ref.WeakReference;
@@ -26,6 +27,11 @@ public class JSInvoker {
 
     @JavascriptInterface
     public void openPictureNews(String entity) {
+        Activity activity = mActivity.get();
+        if (activity == null) {
+            return;
+        }
+
         String url = null;
         String title = null;
         try {
@@ -46,10 +52,6 @@ public class JSInvoker {
             return;
         }
 
-        Activity activity = mActivity.get();
-        if (activity == null) {
-            return;
-        }
         Intent intent = new Intent(activity, PicNewsReadActivity.class);
         intent.putExtra(PicNewsReadActivity.PARAM_URL, url);
         intent.putExtra(PicNewsReadActivity.PARAM_TITLE, title);
@@ -72,5 +74,38 @@ public class JSInvoker {
             e.printStackTrace();
             return "";
         }
+    }
+
+    @JavascriptInterface
+    public void openWeixinNews(String entity) {
+        Activity activity = mActivity.get();
+        if (activity == null) {
+            return;
+        }
+
+        String url = null;
+        String title = null;
+        try {
+            JSONObject jsonObject = new JSONObject(entity);
+            String link = jsonObject.optString("link");
+            String openLink = jsonObject.optString("open_link");
+            title = jsonObject.optString("title");
+            if (!TextUtils.isEmpty(openLink)) {
+                url = openLink;
+            } else {
+                url = link;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+
+        Intent intent = new Intent(activity, ArticleActivity.class);
+        intent.putExtra(PicNewsReadActivity.PARAM_URL, url);
+        intent.putExtra(PicNewsReadActivity.PARAM_TITLE, title);
+        activity.startActivity(intent);
     }
 }
