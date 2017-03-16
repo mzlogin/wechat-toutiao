@@ -1,16 +1,17 @@
 package org.mazhuang.wechattoutiao.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.AbsoluteLayout;
 import android.widget.ProgressBar;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
+import org.mazhuang.wechattoutiao.R;
 
 /**
  * Created by mazhuang on 2017/3/15.
@@ -31,11 +32,29 @@ public class ProgressWebView extends WebView {
     }
 
     private void initViews(Context context, AttributeSet attrs) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int defaultProgressHeight = (int)(3 * displayMetrics.density + 0.5);
+
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ProgressWebView);
+        int progressHeightPixels = defaultProgressHeight;
+        Drawable progressDrawable = null;
+        try {
+            progressHeightPixels = ta.getDimensionPixelSize(R.styleable.ProgressWebView_progressHeight, defaultProgressHeight);
+            progressDrawable = ta.getDrawable(R.styleable.ProgressWebView_progressDrawable);
+        } finally {
+            ta.recycle();
+        }
+
+        if (progressDrawable == null) {
+            progressDrawable = getResources().getDrawable(android.R.drawable.progress_horizontal);
+        }
+
+
         mProgressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
         AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, 6, 0, 0); // TODO 高度改为自定义属性
+                LayoutParams.MATCH_PARENT, progressHeightPixels, 0, 0);
         mProgressBar.setLayoutParams(lp);
-        mProgressBar.setProgressDrawable(getResources().getDrawable(android.R.drawable.progress_horizontal)); // TODO 改为自定义属性
+        mProgressBar.setProgressDrawable(progressDrawable);
         addView(mProgressBar);
         mWebChromeClient = new WebChromeClient() {
             @Override

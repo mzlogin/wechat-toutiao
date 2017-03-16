@@ -78,6 +78,20 @@ public class JSInvoker {
 
     @JavascriptInterface
     public void openWeixinNews(String entity) {
+        openUrl(entity);
+    }
+
+    @JavascriptInterface
+    public void weixin_openWeixinNews(String entity) {
+        openUrl(entity);
+    }
+
+    @JavascriptInterface
+    public void weixin_openUrl(String entity) {
+        openUrl(entity);
+    }
+
+    private void openUrl(String entity) {
         Activity activity = mActivity.get();
         if (activity == null) {
             return;
@@ -104,8 +118,8 @@ public class JSInvoker {
         }
 
         Intent intent = new Intent(activity, ArticleActivity.class);
-        intent.putExtra(PicNewsReadActivity.PARAM_URL, url);
-        intent.putExtra(PicNewsReadActivity.PARAM_TITLE, title);
+        intent.putExtra(ArticleActivity.PARAM_URL, url);
+        intent.putExtra(ArticleActivity.PARAM_TITLE, title);
         activity.startActivity(intent);
     }
 }
