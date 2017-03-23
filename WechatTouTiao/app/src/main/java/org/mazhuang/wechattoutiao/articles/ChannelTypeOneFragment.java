@@ -3,6 +3,7 @@ package org.mazhuang.wechattoutiao.articles;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,18 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
         super.onResume();
 
         mPresenter.start();
+
+        if (needForceRefresh()) {
+            mRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (!mFirstFetchFinished) {
+                        mRefreshLayout.setRefreshing(true);
+                    }
+                }
+            });
+        }
+        mChannelInfo.last_showTime = System.currentTimeMillis();
     }
 
     private void initSwipeLayout(SwipeRefreshLayout swipeRefreshLayout) {
@@ -145,6 +158,11 @@ public class ChannelTypeOneFragment extends BaseFragment implements SwipeRefresh
     public void showLoadingMoreArticlesError() {
         finishRefresh();
         mLoadMoreButton.setEnabled(true);
+    }
+
+    @Override
+    public boolean needForceRefresh() {
+        return (System.currentTimeMillis() - mChannelInfo.last_showTime > 30*60*1000);
     }
 
     @Override

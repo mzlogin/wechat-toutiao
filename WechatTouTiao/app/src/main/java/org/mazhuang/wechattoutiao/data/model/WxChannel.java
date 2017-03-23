@@ -21,6 +21,8 @@ public class WxChannel implements Parcelable {
     public List<Entrance> external_entrance;
     public String h5_link;
 
+    public long last_showTime; // 自定义字段，上一次该 Channel 显示的时间
+
     WxChannel(Parcel in) {
         channel_type = in.readString();
         dotnotify = in.readString();
@@ -32,6 +34,7 @@ public class WxChannel implements Parcelable {
         subid = in.readString();
         in.readTypedList(external_entrance, Entrance.CREATOR);
         h5_link = in.readString();
+        last_showTime = in.readLong();
     }
 
     @Override
@@ -51,6 +54,7 @@ public class WxChannel implements Parcelable {
         dest.writeString(subid);
         dest.writeTypedList(external_entrance);
         dest.writeString(h5_link);
+        dest.writeLong(last_showTime);
     }
 
     public static final Parcelable.Creator<WxChannel> CREATOR

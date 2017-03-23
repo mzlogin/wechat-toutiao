@@ -28,13 +28,15 @@ public interface ArticlesContract {
 
         void showLoadingMoreArticlesError();
 
+        boolean needForceRefresh();
+
         WxChannel getChannelInfo();
 
     }
 
     interface Presenter extends BasePresenter {
 
-        void loadArticles(boolean focus);
+        void loadArticles(boolean force);
 
         void loadMoreArticles();
 

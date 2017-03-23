@@ -10,6 +10,8 @@ import org.mazhuang.wechattoutiao.data.model.WxChannel;
  */
 
 public class BaseFragment extends Fragment {
+    public String TAG = getClass().getSimpleName();
+
     public static final String CHANNEL_INFO = "channel_info";
 
     protected WxChannel mChannelInfo;

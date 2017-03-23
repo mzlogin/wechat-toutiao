@@ -20,11 +20,11 @@ public class ArticlesPresenter implements ArticlesContract.Presenter {
     }
 
     @Override
-    public void loadArticles(boolean focus) {
+    public void loadArticles(boolean force) {
         DataSource.getInstance().getArticles(
                 mArticlesView.getChannelInfo(),
                 -1,
-                focus,
+                force,
                 new IDataSource.LoadArticlesCallBack() {
                     @Override
                     public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
@@ -68,6 +68,6 @@ public class ArticlesPresenter implements ArticlesContract.Presenter {
 
     @Override
     public void start() {
-        loadArticles(false);
+        loadArticles(mArticlesView.needForceRefresh());
     }
 }

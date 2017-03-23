@@ -77,34 +77,33 @@ public class DataSource implements IDataSource {
     @Override
     public void getArticles(final WxChannel channelInfo,
                             int endStreamId, // ignore
-                            final boolean focusRefresh,
+                            final boolean forceRefresh,
                             @NonNull final LoadArticlesCallBack callback) {
-        if (focusRefresh) {
-            getArticlesFromRemote(channelInfo, getEndStreamId(channelInfo.id), focusRefresh, callback);
-        } else {
-            if (mCachedArticles != null && mCachedArticles.containsKey(channelInfo.id)) {
-                callback.onArticlesLoaded(mCachedArticles.get(channelInfo.id), 0);
-                return;
-            }
-
-            mLocalDataSource.getArticles(
-                    channelInfo,
-                    getEndStreamId(channelInfo.id),
-                    focusRefresh,
-                    new LoadArticlesCallBack() {
-                        @Override
-                        public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
-                            addCount = addArticlesCache(channelInfo.id, articles);
-                            callback.onArticlesLoaded(mCachedArticles.get(channelInfo.id), addCount);
-                        }
-
-                        @Override
-                        public void onDataNotAvailable() {
-                            getArticlesFromRemote(channelInfo, getEndStreamId(channelInfo.id), focusRefresh, callback);
-                        }
-                    });
+        if (!forceRefresh && mCachedArticles != null && mCachedArticles.containsKey(channelInfo.id)) {
+            callback.onArticlesLoaded(mCachedArticles.get(channelInfo.id), 0);
+            return;
         }
 
+        mLocalDataSource.getArticles(
+                channelInfo,
+                getEndStreamId(channelInfo.id),
+                forceRefresh,
+                new LoadArticlesCallBack() {
+                    @Override
+                    public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
+                        addCount = addArticlesCache(channelInfo.id, articles);
+                        if (!forceRefresh) {
+                            callback.onArticlesLoaded(mCachedArticles.get(channelInfo.id), addCount);
+                        } else {
+                            getArticlesFromRemote(channelInfo, getEndStreamId(channelInfo.id), forceRefresh, callback);
+                        }
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        getArticlesFromRemote(channelInfo, getEndStreamId(channelInfo.id), forceRefresh, callback);
+                    }
+                });
     }
 
     @Override
@@ -154,20 +153,22 @@ public class DataSource implements IDataSource {
                 new LoadArticlesCallBack() {
                     @Override
                     public void onArticlesLoaded(List<WxArticle> articles, int addCount) {
-                        if (articles == null || articles.size() == 0) {
-                            if (!focusRefresh) {
-                                callBack.onDataNotAvailable();
-                                return;
-                            }
-                        } else {
+                        if (articles != null && articles.size() != 0) {
                             addCount = addArticlesCache(channelInfo.id, articles);
                         }
-                        callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id), addCount);
+
+                        if (mCachedArticles != null && mCachedArticles.containsKey(channelInfo.id)) {
+                            callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id), addCount);
+                        } else {
+                            callBack.onDataNotAvailable();
+                        }
                     }
 
                     @Override
                     public void onDataNotAvailable() {
-                        if (!focusRefresh) {
+                        if (mCachedArticles != null && mCachedArticles.containsKey(channelInfo.id)) {
+                            callBack.onArticlesLoaded(mCachedArticles.get(channelInfo.id), 0);
+                        } else {
                             callBack.onDataNotAvailable();
                         }
                     }
