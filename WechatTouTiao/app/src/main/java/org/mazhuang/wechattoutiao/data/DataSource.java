@@ -9,6 +9,7 @@ import org.mazhuang.wechattoutiao.data.source.remote.RemoteDataSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -205,6 +206,14 @@ public class DataSource implements IDataSource {
         }
 
         mCachedChannels.clear();
+
+        Iterator<WxChannel> iter = channels.iterator();
+        while (iter.hasNext()) {
+            WxChannel wxChannel = iter.next();
+            if (wxChannel.name.equals("订阅")) { // 去掉订阅分类，这个功能在搜狗里也会逐渐去掉
+                iter.remove();
+            }
+        }
 
         mCachedChannels = channels;
     }
