@@ -25,9 +25,6 @@ import java.util.UUID;
  */
 
 public class DeviceInfo {
-
-    private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
-
     private static class LazyHolder {
         private static DeviceInfo INSTANCE = new DeviceInfo();
     }
@@ -55,8 +52,8 @@ public class DeviceInfo {
 
     private void initLocation(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.ACCESS_FINE_LOCATION )
-                == PackageManager.PERMISSION_GRANTED ) {
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
             LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
             if (locationManager != null &&
                     locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
@@ -101,7 +98,12 @@ public class DeviceInfo {
         TelephonyManager telephonyManager = (TelephonyManager) activity
                 .getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
-            id = telephonyManager.getDeviceId();
+            if (ContextCompat.checkSelfPermission(activity,
+                    Manifest.permission.READ_PHONE_STATE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                id = telephonyManager.getDeviceId();
+            }
+
             if (!TextUtils.isEmpty(id)) {
                 mIMSI = id;
             }
