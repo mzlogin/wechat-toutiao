@@ -11,4 +11,5 @@
     <string name="share_template">%1$s\n\n%2$s</string>
     <string name="share_to">分享到</string>
     <string name="cannot_share">无法分享</string>
+    <string name="permission_denied">请求的权限被拒绝，部分功能可能无法正常使用</string>
 </resources>
