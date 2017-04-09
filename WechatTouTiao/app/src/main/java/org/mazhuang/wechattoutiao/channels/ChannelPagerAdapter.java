@@ -49,6 +49,10 @@ public class ChannelPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        if (mData == null || mData.size() <= position) {
+            return null;
+        }
+
         Fragment fragment = getChannelFragment(mData.get(position).channel_type);
         Bundle args = new Bundle();
         args.putParcelable(ChannelTypeOneFragment.CHANNEL_INFO, mData.get(position));
