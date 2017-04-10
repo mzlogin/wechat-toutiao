@@ -52,9 +52,11 @@ public class ChannelsActivity extends BaseActivity implements ChannelsContract.V
 
     @Override
     public void onBackPressed() {
-        BaseFragment currentFragment = (BaseFragment) mChannelAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
-        if (currentFragment != null && currentFragment.onBackPressed()) {
-            return;
+        if (mChannelAdapter.getCount() > 0) {
+            BaseFragment currentFragment = (BaseFragment) mChannelAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
+            if (currentFragment != null && currentFragment.onBackPressed()) {
+                return;
+            }
         }
 
         long currentTime = System.currentTimeMillis();
