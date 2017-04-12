@@ -14,37 +14,27 @@ import javax.crypto.spec.SecretKeySpec;
  */
 
 public class Security {
-    private static String algorithm = "AES";
-    private static String transformation = "AES/CBC/PKCS7Padding";
-    private static String key = "sougouappno.0001";
-    private static String encoding = "UTF-8";
+
+    static {
+        System.loadLibrary("jni-encrypt");
+    }
+
+    public static native String getAlgorithm();
+    public static native String getKey();
+    public static native String getTransformation();
+    public static native String getEncoding();
+
+    private static String algorithm = getAlgorithm();
+    private static String transformation = getTransformation();
+    private static String key = getKey();
+    private static String encoding = getEncoding();
+
+    public static native String encMethod11(String input);
+    public static native String encMethod12(String input);
+    public static native String encMethod13(String input);
 
     public static String aesEnc(String str) throws Exception {
         return aesEnc(str, key);
-    }
-
-    public static String md5(String input) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            byte[] inputByteArray = input.getBytes();
-            messageDigest.update(inputByteArray);
-            byte[] resultByteArray = messageDigest.digest();
-            return byteArrayToHex(resultByteArray);
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
-    }
-
-    private static String byteArrayToHex(byte[] byteArray) {
-        final String hexDigits = "0123456789abcdef";
-        char[] resultCharArray = new char[byteArray.length * 2];
-        int index = 0;
-        for (byte b : byteArray) {
-            resultCharArray[index++] = hexDigits.toCharArray()[(b & 0xf0) >>> 4];
-            resultCharArray[index++] = hexDigits.toCharArray()[b & 0xf];
-        }
-
-        return new String(resultCharArray);
     }
 
     public static String aesEnc(String str, String key) throws Exception {

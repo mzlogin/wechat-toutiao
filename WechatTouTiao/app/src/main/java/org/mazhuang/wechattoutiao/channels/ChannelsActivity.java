@@ -9,6 +9,7 @@ import org.mazhuang.wechattoutiao.R;
 import org.mazhuang.wechattoutiao.articles.BaseFragment;
 import org.mazhuang.wechattoutiao.base.BaseActivity;
 import org.mazhuang.wechattoutiao.data.model.WxChannel;
+import org.mazhuang.wechattoutiao.util.Security;
 
 import java.util.List;
 

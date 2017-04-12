@@ -11,6 +11,14 @@ android {
         versionCode 1
         versionName "0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_TOOLCHAIN=clang'
+            }
+        }
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'armeabi', 'x86', 'x86_64', 'mips', 'mips64'
+        }
     }
 
     signingConfigs {
@@ -37,6 +45,51 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+
+//    productFlavors {
+//        arm7 {
+//            // in the future, ndk.abiFilter might also work
+//            ndk {
+//                abiFilter 'armeabi-v7a'
+//            }
+//        }
+//        arm8 {
+//            ndk {
+//                abiFilters 'arm64-v8a'
+//            }
+//        }
+//        arm {
+//            ndk {
+//                abiFilter 'armeabi'
+//            }
+//        }
+//        x86 {
+//            ndk {
+//                abiFilter 'x86'
+//            }
+//        }
+//        x86_64 {
+//            ndk {
+//                abiFilter 'x86_64'
+//            }
+//        }
+//        mips {
+//            ndk {
+//                abiFilters 'mips', 'mips64'
+//            }
+//        }
+//        universal {
+//            ndk {
+//                abiFilters 'mips', 'mips64', 'x86', 'x86_64'
+//            }
+//        }
+//    }
 }
 
 dependencies {

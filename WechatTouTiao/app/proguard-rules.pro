@@ -97,3 +97,8 @@
 -keep class * implements com.google.gson.JsonDeserializer
 
 ##---------------End: proguard configuration for Gson  ----------
+
+# ==================== JNI
+-keep class org.mazhuang.wechattoutiao.util.Security {
+*;
+}

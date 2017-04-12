@@ -139,7 +139,7 @@ public class DeviceInfo {
             }
         }
 
-        String md5 = Security.md5(id + "sogouapp");
+        String md5 = Security.encMethod12(id);
         if (md5 != null && md5.length() > 4) {
             md5 = md5.substring(0, 4);
         } else {
@@ -149,9 +149,9 @@ public class DeviceInfo {
         mMid = md5 + id;
 
         // xid
-        String xid = Security.md5(Long.toString(System.currentTimeMillis()) + mIMSI);
+        String xid = Security.encMethod11(Long.toString(System.currentTimeMillis()) + mIMSI);
         if (xid != null) {
-            xid = Security.md5(xid + "sogou_xid");
+            xid = Security.encMethod13(xid);
             if (xid != null && xid.length() > 4) {
                 xid = xid.substring(0, 4) + xid;
                 if (xid.length() == 36) {
