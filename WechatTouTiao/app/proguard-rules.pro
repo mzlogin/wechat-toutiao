@@ -99,6 +99,10 @@
 ##---------------End: proguard configuration for Gson  ----------
 
 # ==================== JNI
--keep class org.mazhuang.wechattoutiao.util.Security {
-*;
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-keepclassmembers class * {
+    native <methods>;
 }
