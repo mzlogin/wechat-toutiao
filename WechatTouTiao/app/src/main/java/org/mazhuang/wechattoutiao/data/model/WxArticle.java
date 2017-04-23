@@ -1,5 +1,9 @@
 package org.mazhuang.wechattoutiao.data.model;
 
+import android.text.TextUtils;
+
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -51,5 +55,40 @@ public class WxArticle implements Comparable<WxArticle> {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        WxArticle that = (WxArticle) obj;
+
+        if (!TextUtils.isEmpty(this.account_openid) && !TextUtils.isEmpty(that.account_openid)) {
+            if (!this.account_openid.equals(that.account_openid)) {
+                return false;
+            }
+        }
+
+        if (!TextUtils.isEmpty(this.title) && !TextUtils.isEmpty(that.title)) {
+            if (!this.title.equals(that.title)) {
+                return false;
+            }
+        }
+
+        if (!TextUtils.isEmpty(this.link) && !TextUtils.isEmpty(that.link)) {
+            if (!this.link.equals(that.link)) {
+                return false;
+            }
+        }
+
+        if (!TextUtils.isEmpty(this.open_link) && !TextUtils.isEmpty(that.open_link)) {
+            if (!this.open_link.equals(that.open_link)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
