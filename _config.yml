@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl: 
-url: http://mazhuang.org/wechat-toutiao
+url: https://mazhuang.org/wechat-toutiao
 date_format: "ordinal"
 title: 微小微头条
 author: Zhuang Ma 
